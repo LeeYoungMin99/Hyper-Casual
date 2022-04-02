@@ -19,16 +19,16 @@ public abstract class Weapon
     public void Attack(float damage,
                        float criticalMultiplier,
                        float criticalRate,
-                       int forwardFireCount,
-                       int backwardFireCount,
+                       int frontFireCount,
+                       int rearFireCount,
                        int SideFireCount,
                        int diagonalFireCount)
     {
-        FireHelper(damage, criticalMultiplier, criticalRate, Owner.right, Owner.transform.eulerAngles.y, forwardFireCount);
+        FireHelper(damage, criticalMultiplier, criticalRate, Owner.right, Owner.transform.eulerAngles.y, frontFireCount);
 
-        if (0 != backwardFireCount)
+        if (0 != rearFireCount)
         {
-            FireHelper(damage, criticalMultiplier, criticalRate, Owner.right, Owner.transform.eulerAngles.y + 180f, backwardFireCount);
+            FireHelper(damage, criticalMultiplier, criticalRate, Owner.right, Owner.transform.eulerAngles.y + 180f, rearFireCount);
         }
 
         if (0 != SideFireCount)

@@ -11,10 +11,12 @@ public class Player : Character
     public float CriticalRate = 0f;
 
     public int AttackCount = 1;
-    public int ForwardFireCount = 1;
-    public int BackwardFireCount = 1;
+    public int FrontFireCount = 1;
+    public int RearFireCount = 1;
     public int SideFireCount = 1;
     public int DiagonalFireCount = 1;
+
+    public float t = 30f;
 
     private void Awake()
     {
@@ -23,18 +25,25 @@ public class Player : Character
 
     private void Update()
     {
-        Weapon.Attack(Damage,
-                      CriticalMultiplier,
-                      CriticalRate,
-                      ForwardFireCount,
-                      BackwardFireCount,
-                      SideFireCount,
-                      DiagonalFireCount);
+        t += Time.deltaTime;
+
+        if (AttackSpeed <= t)
+        {
+            Weapon.Attack(Damage,
+                          CriticalMultiplier,
+                          CriticalRate,
+                          FrontFireCount,
+                          RearFireCount,
+                          SideFireCount,
+                          DiagonalFireCount);
+
+            t = 0f;
+        }
     }
 
     public override void Death()
     {
-       
+
     }
 
 }

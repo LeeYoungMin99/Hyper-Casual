@@ -7,6 +7,7 @@ public abstract class Ability
     public bool IsEnabled = false;
 
     public abstract void InvokeAbility(
+        Transform transform,
         Collider other,
         float criticalMultiplier,
         float CriticalRate,

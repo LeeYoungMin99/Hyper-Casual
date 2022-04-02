@@ -6,7 +6,6 @@ public class Projectile : MonoBehaviour
 {
     public Ability[] Abilities;
     public Rigidbody Rigidbody;
-    public LayerMask LayerMask;
 
     public float CriticalMultiplier = 2f;
     public float CriticalRate = 0f;
@@ -31,7 +30,7 @@ public class Projectile : MonoBehaviour
     {
         if (6 != other.gameObject.layer)
         {
-            other.GetComponent<IDamageable>().TakeDamage(Damage);
+            other.gameObject.GetComponent<IDamageable>().TakeDamage(Damage);
         }
 
         bool isActive = false;
@@ -40,7 +39,7 @@ public class Projectile : MonoBehaviour
 
         for (int i = 0; i < count; ++i)
         {
-            Abilities[i].InvokeAbility(other, CriticalMultiplier, CriticalRate, ref Damage, ref WallBounceCount, ref MonsterBounceCount, ref isActive);
+            Abilities[i].InvokeAbility(transform, other, CriticalMultiplier, CriticalRate, ref Damage, ref WallBounceCount, ref MonsterBounceCount, ref isActive);
         }
 
         gameObject.SetActive(isActive);
