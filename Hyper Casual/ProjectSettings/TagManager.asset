@@ -11,17 +11,17 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Map Object
+  - Friendly Projectile
+  - Enemy Projectile
+  - Friendly
+  - Friendly Water Walkable
+  - Friendly Wall Walkable
+  - Friendly Anywhere Walkable
+  - Enemy
+  - Enemy Water Walkable
+  - Enemy Wall Walkable
+  - Enemy Anywhere Walkable
   - 
   - 
   - 
