@@ -20,7 +20,7 @@ public class Player : Character
 
     private void Awake()
     {
-        Weapon = new Knife(transform);
+        Weapon = new Knife();
     }
 
     private void Update()
@@ -29,7 +29,8 @@ public class Player : Character
 
         if (AttackSpeed <= t)
         {
-            Weapon.Attack(Damage,
+            Weapon.Attack(transform,
+                          Damage,
                           CriticalMultiplier,
                           CriticalRate,
                           FrontFireCount,

@@ -9,8 +9,13 @@ public abstract class Character : MonoBehaviour, IDamageable
 
     public abstract void Death();
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, float criticalMultiplier, float criticalRate)
     {
+        if (Random.Range(0f, 100f) > criticalRate)
+        {
+            damage *= criticalMultiplier;
+        }
+
         Health -= damage;
 
         Debug.Log($"{damage} ÇÇÇØ");

@@ -23,7 +23,6 @@ public class BouncyWall : Ability
 
         damage *= 0.5f;
 
-
         _ray.origin = transform.position;
         _ray.direction = transform.forward;
 

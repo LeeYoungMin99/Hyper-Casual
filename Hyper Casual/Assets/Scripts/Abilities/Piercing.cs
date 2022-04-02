@@ -10,6 +10,8 @@ public class Piercing : Ability
 
         if (6 == other.gameObject.layer) return;
 
+        if (true == isActive) return;
+
         isActive = true;
 
         damage *= 0.67f;

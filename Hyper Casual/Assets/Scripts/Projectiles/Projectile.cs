@@ -26,27 +26,33 @@ public class Projectile : MonoBehaviour
         MonsterBounceCount = 0;
     }
 
+    private void FixedUpdate()
+    {
+        Rigidbody.MovePosition(transform.position + (transform.forward * (MoveSpeed * Time.deltaTime)));
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (6 != other.gameObject.layer)
         {
-            other.gameObject.GetComponent<IDamageable>().TakeDamage(Damage);
+            other.GetComponent<IDamageable>().TakeDamage(Damage, CriticalMultiplier, CriticalRate);
         }
 
         bool isActive = false;
 
         int count = Abilities.Length;
-
         for (int i = 0; i < count; ++i)
         {
-            Abilities[i].InvokeAbility(transform, other, CriticalMultiplier, CriticalRate, ref Damage, ref WallBounceCount, ref MonsterBounceCount, ref isActive);
+            Abilities[i].InvokeAbility(transform,
+                                       other,
+                                       CriticalMultiplier,
+                                       CriticalRate,
+                                   ref Damage,
+                                   ref WallBounceCount,
+                                   ref MonsterBounceCount,
+                                   ref isActive);
         }
 
         gameObject.SetActive(isActive);
-    }
-
-    private void FixedUpdate()
-    {
-        Rigidbody.velocity = transform.forward * (MoveSpeed * Time.deltaTime);
     }
 }
