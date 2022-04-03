@@ -54,7 +54,7 @@ public class Projectile : MonoBehaviour
                                    ref isPoisonous);
         }
 
-        if (6 != other.gameObject.layer)
+        if (LayerValue.MAP_OBJECT_LAYER != other.gameObject.layer)
         {
             other.GetComponent<IDamageable>().TakeDamage(Damage,
                                                          CriticalMultiplier,

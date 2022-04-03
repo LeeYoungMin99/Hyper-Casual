@@ -5,7 +5,6 @@ using UnityEngine;
 public class Ricochet : Ability
 {
     private Collider[] _colliders = new Collider[8];
-    private LayerMask _layerMask = (1 << 13) + (1 << 14) + (1 << 15) + (1 << 16);
     private RaycastHit _hit;
     private Ray _ray = new Ray();
 
@@ -25,7 +24,7 @@ public class Ricochet : Ability
     {
         if (false == IsEnabled) return;
 
-        if (6 == other.gameObject.layer) return;
+        if (LayerValue.MAP_OBJECT_LAYER == other.gameObject.layer) return;
 
         if (MAX_BOUNCE_COUNT <= monsterBounce) return;
 
@@ -35,20 +34,20 @@ public class Ricochet : Ability
 
         damage *= 0.7f;
 
-        int count = Physics.OverlapSphereNonAlloc(other.transform.position, 10f, _colliders, _layerMask);
+        int count = Physics.OverlapSphereNonAlloc(other.transform.position, 10f, _colliders, LayerValue.ALL_ENEMY_LAYER_MASK);
 
         if (count == 0) return;
 
         _ray.origin = transform.position;
         _ray.direction = transform.forward;
 
+        other.Raycast(_ray, out _hit, 10f);
+
+        transform.position = _hit.point;
+
         for (int i = 0; i < count; ++i)
         {
             if (other == _colliders[i]) continue;
-
-            other.Raycast(_ray, out _hit, 10f);
-
-            transform.position = _hit.point;
 
             Vector3 targetDir = (_colliders[i].transform.position - transform.position).normalized;
 

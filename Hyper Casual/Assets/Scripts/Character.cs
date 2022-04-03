@@ -4,15 +4,17 @@ using UnityEngine;
 
 public abstract class Character : MonoBehaviour, IDamageable
 {
-    protected Rigidbody _rigidbody;
-
     public float MaxHealth;
     public float Health;
     public float Damage;
+    public float MoveSpeed;
 
-    public bool IsFreeze = false;
-    public bool IsBlaze = false;
-    public bool IsPoisonous = false;
+    protected Rigidbody _rigidbody;
+    protected Animator _animator;
+
+    private bool _isFreeze = false;
+    private bool _isBlaze = false;
+    private bool _isPoisonous = false;
 
     private const float DURATION = 2f;
     private const float BLAZE_DAMAGE_MULTIPLIER = 0.18f;
@@ -23,18 +25,19 @@ public abstract class Character : MonoBehaviour, IDamageable
 
     public abstract void Death();
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _animator = GetComponent<Animator>();
     }
 
     public void OnEnable()
     {
         _rigidbody.detectCollisions = true;
 
-        IsFreeze = false;
-        IsBlaze = false;
-        IsPoisonous = false;
+        _isFreeze = false;
+        _isBlaze = false;
+        _isPoisonous = false;
     }
 
     public void TakeDamage(float damage,
@@ -46,7 +49,7 @@ public abstract class Character : MonoBehaviour, IDamageable
     {
         if (true == isFreeze)
         {
-            if (false == IsFreeze)
+            if (false == _isFreeze)
             {
                 StartCoroutine(Freeze());
             }
@@ -54,7 +57,7 @@ public abstract class Character : MonoBehaviour, IDamageable
 
         if (true == isBlaze)
         {
-            if (false == IsBlaze)
+            if (false == _isBlaze)
             {
                 StartCoroutine(Blaze(damage * BLAZE_DAMAGE_MULTIPLIER, criticalMultiplier, criticalRate));
             }
@@ -62,47 +65,47 @@ public abstract class Character : MonoBehaviour, IDamageable
 
         if (true == isPoisonous)
         {
-            if (false == IsPoisonous)
+            if (false == _isPoisonous)
             {
                 StartCoroutine(Poison(damage * POISON_DAMAGE_MULTIPLIER, criticalMultiplier, criticalRate));
             }
         }
-
-        Debug.Log($"일반 피해 {damage}");
 
         TakeDamageHelper(damage, criticalMultiplier, criticalRate);
     }
 
     public IEnumerator Freeze()
     {
-        IsFreeze = true;
+        _isFreeze = true;
 
         yield return new WaitForSeconds(DURATION);
 
-        IsFreeze = false;
+        _isFreeze = false;
     }
 
     public IEnumerator Blaze(float damage, float criticalMultiplier, float criticalRate)
     {
+        _isBlaze = true;
+
         for (int i = 0; i < BLAZE_TICK_COUNT; ++i)
         {
             yield return new WaitForSeconds(BLAZE_INTERVAL_TIME);
 
             TakeDamageHelper(damage, criticalMultiplier, criticalRate);
-
-            Debug.Log($"불 피해 {damage}");
         }
+
+        _isBlaze = false;
     }
 
     public IEnumerator Poison(float damage, float criticalMultiplier, float criticalRate)
     {
+        _isPoisonous = true;
+
         while (true)
         {
             yield return new WaitForSeconds(POISON_INTERVAL_TIME);
 
             TakeDamageHelper(damage, criticalMultiplier, criticalRate);
-
-            Debug.Log($"독 피해 {damage}");
         }
     }
 

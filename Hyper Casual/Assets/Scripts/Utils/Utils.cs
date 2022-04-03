@@ -22,3 +22,10 @@ public class Utils
         return angle;
     }
 }
+
+public class LayerValue
+{
+    public const int MAP_OBJECT_LAYER = 6;
+    public const int MAP_OBJECT_LAYER_MASK = 1 << 6;
+    public const int ALL_ENEMY_LAYER_MASK = (1 << 13) + (1 << 14) + (1 << 15) + (1 << 16);
+}
