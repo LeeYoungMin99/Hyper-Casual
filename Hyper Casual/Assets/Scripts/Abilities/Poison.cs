@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Ability
+public class Poison : Ability
 {
-    public bool IsEnabled = false;
-
-    public abstract void InvokeAbility(Transform transform,
+    public override void InvokeAbility(Transform transform,
                                        Collider other,
                                        float criticalMultiplier,
                                        float CriticalRate,
@@ -16,5 +14,10 @@ public abstract class Ability
                                    ref bool isActive,
                                    ref bool isFreeze,
                                    ref bool isBlaze,
-                                   ref bool isPoisonous);
+                                   ref bool isPoisonous)
+    {
+        if (false == IsEnabled) return;
+
+        isPoisonous = true;
+    }
 }

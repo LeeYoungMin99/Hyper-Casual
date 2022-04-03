@@ -4,5 +4,10 @@ using UnityEngine;
 
 public interface IDamageable
 {
-    public void TakeDamage(float damage, float criticalMultiplier, float criticalRate);
+    public void TakeDamage(float damage,
+                           float criticalMultiplier,
+                           float criticalRate,
+                           bool isFreeze,
+                           bool isBlaze,
+                           bool isPoisonous);
 }

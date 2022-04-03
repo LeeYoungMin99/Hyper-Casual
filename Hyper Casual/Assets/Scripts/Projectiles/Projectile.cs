@@ -33,12 +33,10 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (6 != other.gameObject.layer)
-        {
-            other.GetComponent<IDamageable>().TakeDamage(Damage, CriticalMultiplier, CriticalRate);
-        }
-
         bool isActive = false;
+        bool isFreeze = false;
+        bool isBruning = false;
+        bool isPoisonous = false;
 
         int count = Abilities.Length;
         for (int i = 0; i < count; ++i)
@@ -50,7 +48,20 @@ public class Projectile : MonoBehaviour
                                    ref Damage,
                                    ref WallBounceCount,
                                    ref MonsterBounceCount,
-                                   ref isActive);
+                                   ref isActive,
+                                   ref isFreeze,
+                                   ref isBruning,
+                                   ref isPoisonous);
+        }
+
+        if (6 != other.gameObject.layer)
+        {
+            other.GetComponent<IDamageable>().TakeDamage(Damage,
+                                                         CriticalMultiplier,
+                                                         CriticalRate,
+                                                         isFreeze,
+                                                         isBruning,
+                                                         isPoisonous);
         }
 
         gameObject.SetActive(isActive);
