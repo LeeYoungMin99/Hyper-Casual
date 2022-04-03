@@ -6,6 +6,6 @@ public class Monster : Character
 {
     public override void Death()
     {
-        
+
     }
 }

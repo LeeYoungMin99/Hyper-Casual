@@ -4,38 +4,38 @@ using UnityEngine;
 
 public abstract class Weapon
 {
-    public Transform Owner;
     public ObjectPoolingManager ObjectPoolingManager;
 
     protected Ability[] _abilities;
 
-    public Weapon(Transform owner)
+    public Weapon()
     {
-        Owner = owner;
+        Init();
     }
 
     public abstract void Init();
 
-    public void Attack(float damage,
+    public void Attack(Transform transform,
+                       float damage,
                        float criticalMultiplier,
                        float criticalRate,
-                       int forwardFireCount,
-                       int backwardFireCount,
+                       int frontFireCount,
+                       int rearFireCount,
                        int SideFireCount,
                        int diagonalFireCount)
     {
-        FireHelper(damage, criticalMultiplier, criticalRate, Owner.right, Owner.transform.eulerAngles.y, forwardFireCount);
+        FireHelper(transform, damage, criticalMultiplier, criticalRate, transform.right, transform.transform.eulerAngles.y, frontFireCount);
 
-        if (0 != backwardFireCount)
+        if (0 != rearFireCount)
         {
-            FireHelper(damage, criticalMultiplier, criticalRate, Owner.right, Owner.transform.eulerAngles.y + 180f, backwardFireCount);
+            FireHelper(transform, damage, criticalMultiplier, criticalRate, transform.right, transform.transform.eulerAngles.y + 180f, rearFireCount);
         }
 
         if (0 != SideFireCount)
         {
-            FireHelper(damage, criticalMultiplier, criticalRate, Owner.forward, Owner.transform.eulerAngles.y - 90f, SideFireCount);
+            FireHelper(transform, damage, criticalMultiplier, criticalRate, transform.forward, transform.transform.eulerAngles.y - 90f, SideFireCount);
 
-            FireHelper(damage, criticalMultiplier, criticalRate, Owner.forward, Owner.transform.eulerAngles.y + 90f, SideFireCount);
+            FireHelper(transform, damage, criticalMultiplier, criticalRate, transform.forward, transform.transform.eulerAngles.y + 90f, SideFireCount);
         }
 
         if (0 != diagonalFireCount)
@@ -44,15 +44,15 @@ public abstract class Weapon
 
             for (int i = diagonalFireCount; i > 0; --i)
             {
-                Fire(damage, criticalMultiplier, criticalRate, Owner.transform.eulerAngles.y + (-angle * i), Owner.position);
-                Fire(damage, criticalMultiplier, criticalRate, Owner.transform.eulerAngles.y + (angle * i), Owner.position);
+                Fire(damage, criticalMultiplier, criticalRate, transform.eulerAngles.y + (-angle * i), transform.position);
+                Fire(damage, criticalMultiplier, criticalRate, transform.eulerAngles.y + (angle * i), transform.position);
             }
         }
     }
 
-    public Vector3 CalculatePosition(Vector3 dir, int maxCount, int curCount)
+    public Vector3 CalculatePosition(Transform transform, Vector3 dir, int maxCount, int curCount)
     {
-        Vector3 startPosition = Owner.position + dir * (0.1f * (maxCount - 1));
+        Vector3 startPosition = transform.position + dir * (0.1f * (maxCount - 1));
 
         return startPosition + dir * (-0.2f * curCount);
     }
@@ -69,11 +69,11 @@ public abstract class Weapon
         projectile.gameObject.SetActive(true);
     }
 
-    public void FireHelper(float damage, float criticalMultiplier, float criticalRate, Vector3 dir, float angle, int maxFireCount)
+    public void FireHelper(Transform transform, float damage, float criticalMultiplier, float criticalRate, Vector3 dir, float angle, int maxFireCount)
     {
         for (int i = 0; i < maxFireCount; ++i)
         {
-            Vector3 position = CalculatePosition(dir, maxFireCount, i);
+            Vector3 position = CalculatePosition(transform, dir, maxFireCount, i);
 
             Fire(damage, criticalMultiplier, criticalRate, angle, position);
         }
