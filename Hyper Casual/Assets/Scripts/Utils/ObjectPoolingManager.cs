@@ -6,17 +6,15 @@ using UnityEngine;
 public class ObjectPoolingManager
 {
     private GameObject _prefab;
-    private Ability[] _abilities;
     private Transform _parent;
 
     private List<Projectile> _objectPool = new List<Projectile>(32);
     private Queue<int> _disabledObjectIndexes = new Queue<int>(32);
     private int _count = 0;
 
-    public ObjectPoolingManager(GameObject prefab, Ability[] abilities)
+    public ObjectPoolingManager(GameObject prefab)
     {
         _prefab = prefab;
-        _abilities = abilities;
 
         _parent = new GameObject(_prefab.name).transform;
     }
@@ -51,7 +49,6 @@ public class ObjectPoolingManager
         ObjectPooling pooling = obj.AddComponent<ObjectPooling>();
 
         Projectile projectile = obj.GetComponent<Projectile>();
-        projectile.Abilities = _abilities;
 
         _objectPool.Add(projectile);
 

@@ -22,7 +22,7 @@ public class BouncyWall : Ability
     {
         if (false == IsEnabled) return;
 
-        if (6 != other.gameObject.layer) return;
+        if (LayerValue.MAP_OBJECT_LAYER != other.gameObject.layer) return;
 
         if (MAX_BOUNCE_COUNT <= wallBounce) return;
 

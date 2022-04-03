@@ -4,16 +4,25 @@ using UnityEngine;
 
 public abstract class Weapon
 {
-    public ObjectPoolingManager ObjectPoolingManager;
-
     protected Ability[] _abilities;
+    protected ObjectPoolingManager _objectPoolingManager;
 
     public Weapon()
     {
         Init();
     }
 
-    public abstract void Init();
+    public virtual void Init()
+    {
+        _abilities = new Ability[6];
+
+        _abilities[0] = new BouncyWall() { IsEnabled = true };
+        _abilities[1] = new Ricochet() { IsEnabled = true };
+        _abilities[2] = new Piercing() { IsEnabled = true };
+        _abilities[3] = new Freeze() { IsEnabled = true };
+        _abilities[4] = new Blaze() { IsEnabled = true };
+        _abilities[5] = new Poison() { IsEnabled = true };
+    }
 
     public void Attack(Transform transform,
                        float damage,
@@ -59,11 +68,12 @@ public abstract class Weapon
 
     public void Fire(float damage, float criticalMultiplier, float criticalRate, float angle, Vector3 position)
     {
-        Projectile projectile = ObjectPoolingManager.GetObject();
+        Projectile projectile = _objectPoolingManager.GetObject();
 
         projectile.Damage = damage;
         projectile.CriticalMultiplier = criticalMultiplier;
         projectile.CriticalRate = criticalRate;
+        projectile.Abilities = _abilities;
         projectile.gameObject.transform.position = position;
         projectile.gameObject.transform.rotation = Quaternion.Euler(0f, angle, 0f);
         projectile.gameObject.SetActive(true);
