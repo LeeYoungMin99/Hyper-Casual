@@ -28,7 +28,6 @@ public class Player : Character
 
     private const float ATTACK_INTERVAL_TIME = 0.1f;
     private const float SEARCH_DISTANCE = 50f;
-
     protected override void Awake()
     {
         base.Awake();
@@ -61,8 +60,12 @@ public class Player : Character
             Quaternion dirQuat = Quaternion.LookRotation(moveVec);
             Quaternion moveQuat = Quaternion.Slerp(_rigidbody.rotation, dirQuat, 0.3f);
 
-            _rigidbody.MovePosition(_rigidbody.position + moveVec);
             _rigidbody.MoveRotation(moveQuat);
+
+            if (false == Physics.Raycast(_rigidbody.position, moveVec, 1f, LayerValue.MAP_OBJECT_LAYER_MASK))
+            {
+                _rigidbody.MovePosition(_rigidbody.position + moveVec);
+            }
         }
 
         _animator.SetBool(AnimationID.IS_MOVE, _isMove);
@@ -92,6 +95,11 @@ public class Player : Character
         }
 
         _animator.SetBool(AnimationID.IS_ATTACK, true);
+    }
+
+    private void LateUpdate()
+    {
+        _rigidbody.velocity = Vector3.zero;
     }
 
     public override void Death()
