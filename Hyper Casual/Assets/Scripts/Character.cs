@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,13 +6,16 @@ using UnityEngine;
 public abstract class Character : MonoBehaviour, IDamageable
 {
     public float MaxHealth;
-    public float Health;
+    public float CurHealth;
     public float Damage;
     public float MoveSpeed;
+
+    public event EventHandler<HealthChangeEventArgs> HealthChangeEvent;
 
     protected Rigidbody _rigidbody;
     protected Animator _animator;
 
+    private HealthChangeEventArgs _healthChangeEventArgs = new HealthChangeEventArgs();
     private bool _isFreeze = false;
     private bool _isBlaze = false;
     private bool _isPoisonous = false;
@@ -31,7 +35,7 @@ public abstract class Character : MonoBehaviour, IDamageable
         _animator = GetComponent<Animator>();
     }
 
-    public void OnEnable()
+    private void OnEnable()
     {
         _rigidbody.detectCollisions = true;
 
@@ -113,7 +117,7 @@ public abstract class Character : MonoBehaviour, IDamageable
     {
         if (0f >= criticalRate) return false;
 
-        if (Random.Range(0f, 100f) >= criticalRate) return false;
+        if (UnityEngine.Random.Range(0f, 100f) >= criticalRate) return false;
 
         return true;
     }
@@ -125,14 +129,25 @@ public abstract class Character : MonoBehaviour, IDamageable
             damage *= criticalMultiplier;
         }
 
-        Health -= damage;
+        CurHealth -= damage;
 
-        if (0f < Health) return;
+        InvokeChangeHealthEvent();
+
+        if (0f < CurHealth) return;
 
         _rigidbody.detectCollisions = false;
 
         StopAllCoroutines();
 
+        HealthChangeEvent = null;
+
         Death();
+    }
+
+    public void InvokeChangeHealthEvent()
+    {
+        _healthChangeEventArgs.MaxHealth = MaxHealth;
+        _healthChangeEventArgs.CurHealth = CurHealth;
+        HealthChangeEvent?.Invoke(this, _healthChangeEventArgs);
     }
 }
