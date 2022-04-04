@@ -76,6 +76,11 @@ public class Player : Character
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha1)) TakeDamage(9999f, 9999f, 100f, false, false, false);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) TakeDamage(10f, 1f, 50f, true, false, false);
+        if (Input.GetKeyDown(KeyCode.Alpha3)) TakeDamage(10f, 1f, 50f, false, true, false);
+        if (Input.GetKeyDown(KeyCode.Alpha4)) TakeDamage(10f, 1f, 50f, false, false, true);
+
         if (true == _isMove || null == _target)
         {
             _target = FindNearTarget();

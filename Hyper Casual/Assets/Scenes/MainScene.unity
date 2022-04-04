@@ -426,6 +426,7 @@ GameObject:
   - component: {fileID: 478443447}
   - component: {fileID: 478443449}
   - component: {fileID: 478443448}
+  - component: {fileID: 478443450}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -494,6 +495,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 478443446}
   m_CullTransparentMesh: 1
+--- !u!114 &478443450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 478443446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 2, y: 2}
+  m_UseGraphicAlpha: 1
 --- !u!1 &478957678
 GameObject:
   m_ObjectHideFlags: 0
@@ -1215,10 +1231,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _healthBarCanvas: {fileID: 1985107361}
-  _bossHealthBarCanvas: {fileID: 0}
+  _bossHealthBarCanvas: {fileID: 775358095}
   _playerHealthBar: {fileID: 2652750401455168042, guid: 648566bc815fe8346aa714341554bd2e, type: 3}
   _monsterHealthBar: {fileID: 2652750401455168042, guid: 98a0157e46433d94b94861c4b33181d0, type: 3}
-  _bossHealthBar: {fileID: 0}
+  _bossHealthBar: {fileID: 4326174792914098845, guid: 514f7404636928448a5e5a866d9316cb, type: 3}
 --- !u!4 &960486064
 Transform:
   m_ObjectHideFlags: 0
@@ -1989,8 +2005,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c44de146b47bb847b7d45a6df0d7c71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 0
-  CurHealth: 0
+  MaxHealth: 1
+  CurHealth: 1
   Damage: 0
   MoveSpeed: 10
   _joystick: {fileID: 968124011}
@@ -2414,7 +2430,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_TargetDisplay: 0
 --- !u!224 &1985107361
 RectTransform:
