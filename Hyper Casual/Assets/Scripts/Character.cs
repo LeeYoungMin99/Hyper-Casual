@@ -124,11 +124,16 @@ public abstract class Character : MonoBehaviour, IDamageable
 
     public void TakeDamageHelper(float damage, float criticalMultiplier, float criticalRate)
     {
+        bool isCritical = false;
+
         if (true == CalculateCritical(criticalRate))
         {
             damage *= criticalMultiplier;
+            isCritical = true;
+            StartCoroutine(CameraShaker.Instance.ShakeCamera(0.5f));
         }
 
+        DamageTextManager.Instance.MarkDamageText(this, damage, isCritical);
         CurHealth -= damage;
 
         InvokeChangeHealthEvent();

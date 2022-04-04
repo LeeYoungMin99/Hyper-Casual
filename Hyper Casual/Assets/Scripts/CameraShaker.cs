@@ -21,7 +21,7 @@ public class CameraShaker
     {
         _cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = amplitueGain;
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         _cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0f;
     }
