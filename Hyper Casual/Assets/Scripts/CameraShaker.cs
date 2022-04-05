@@ -4,25 +4,46 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class CameraShaker
+public class CameraShaker : MonoBehaviour
 {
-    public static readonly CameraShaker Instance = new CameraShaker();
+    [SerializeField] private CinemachineVirtualCamera _cinemachineVirtualCamera;
+
+    public static CameraShaker Instance;
 
     private CinemachineBasicMultiChannelPerlin _cinemachineBasicMultiChannelPerlin;
+    private Coroutine _cameraShakeCoroutine;
+    private float _duration = 0f;
 
-    private CameraShaker()
+    private void Awake()
     {
-        _cinemachineBasicMultiChannelPerlin = GameObject.Find("Virtual Camera")
-                                                        .GetComponent<CinemachineVirtualCamera>()
-                                                        .GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        Instance = this;
+
+        _cinemachineBasicMultiChannelPerlin = _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
 
-    public IEnumerator ShakeCamera(float amplitueGain)
+    public void ShakeCamera(float amplitueGain, float duration)
     {
-        _cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = amplitueGain;
+        if (amplitueGain >= _cinemachineBasicMultiChannelPerlin.m_AmplitudeGain)
+        {
+            _cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = amplitueGain;
+            _duration = duration;
+        }
 
-        yield return new WaitForSeconds(1f);
+        if (null != _cameraShakeCoroutine) return;
+
+        StartCoroutine(ShakeCamera());
+    }
+
+    public IEnumerator ShakeCamera()
+    {
+        while (0 < _duration)
+        {
+            _duration -= Time.deltaTime;
+
+            yield return null;
+        }
 
         _cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0f;
+        _duration = 0f;
     }
 }

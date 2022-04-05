@@ -39,7 +39,7 @@ public class BouncyWall : Ability
 
         Vector3 reflect = Vector3.Reflect(transform.forward, _hit.normal).normalized;
 
-        float angle = Utils.Instance.CalculateAngle(reflect, transform.forward);
+        float angle = Utils.CalculateAngle(reflect, transform.forward);
 
         transform.rotation = Quaternion.Euler(0f, transform.eulerAngles.y + angle, 0f);
     }

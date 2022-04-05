@@ -19,20 +19,26 @@ public class Player : Character
     public int SideFireCount = 1;
     public int DiagonalFireCount = 1;
 
+    private Collider _target;
     private Collider[] _colliders = new Collider[16];
     private Coroutine _extraAttackCoroutine;
-    private Collider _target;
     private RaycastHit _hit;
-    private Ray _ray = new Ray();
     private bool _isMove = false;
 
     private const float ATTACK_INTERVAL_TIME = 0.1f;
     private const float SEARCH_DISTANCE = 50f;
+
     protected override void Awake()
     {
         base.Awake();
 
+        HealthBarManager.Instance.CreateHealthBar(this, EHealthBarType.Player);
+        InvokeChangeHealthEvent();
+
         Weapon = new Knife();
+
+        SlotMachine slotMachine = GameObject.Find("Slot Machine Canvas").transform.
+                                             Find("Slot Machine").GetComponent<SlotMachine>();
     }
 
     private void FixedUpdate()
@@ -73,6 +79,11 @@ public class Player : Character
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha1)) TakeDamage(9999f, 9999f, 100f, false, false, false);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) TakeDamage(10f, 1f, 50f, true, false, false);
+        if (Input.GetKeyDown(KeyCode.Alpha3)) TakeDamage(10f, 1f, 50f, false, true, false);
+        if (Input.GetKeyDown(KeyCode.Alpha4)) TakeDamage(10f, 1f, 50f, false, false, true);
+
         if (true == _isMove || null == _target)
         {
             _target = FindNearTarget();
@@ -82,12 +93,7 @@ public class Player : Character
             return;
         }
 
-        Vector3 targetDir = _target.transform.position - transform.position;
-
-        _ray.origin = transform.position;
-        _ray.direction = targetDir;
-
-        if (false == _target.Raycast(_ray, out _hit, SEARCH_DISTANCE))
+        if (false == _target.attachedRigidbody.detectCollisions)
         {
             _target = FindNearTarget();
 
@@ -115,13 +121,13 @@ public class Player : Character
     private void AttackHelper(int count)
     {
         Weapon.Attack(transform,
-                          Damage,
-                          CriticalMultiplier,
-                          CriticalRate,
-                          FrontFireCount,
-                          RearFireCount,
-                          SideFireCount,
-                          DiagonalFireCount);
+                      Damage,
+                      CriticalMultiplier,
+                      CriticalRate,
+                      FrontFireCount,
+                      RearFireCount,
+                      SideFireCount,
+                      DiagonalFireCount);
 
         if (2 > count) return;
 

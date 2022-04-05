@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class Weapon
 {
     protected Ability[] _abilities;
-    protected ObjectPoolingManager _objectPoolingManager;
+    protected ObjectPoolingManager<Projectile> _objectPoolingManager;
 
     public Weapon()
     {

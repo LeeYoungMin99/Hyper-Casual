@@ -3,20 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPoolingManager
+public class ObjectPoolingManager<T>
 {
     private GameObject _prefab;
     private Transform _parent;
 
-    private List<Projectile> _objectPool = new List<Projectile>(32);
+    private List<T> _objectPool = new List<T>(32);
     private Queue<int> _disabledObjectIndexes = new Queue<int>(32);
     private int _count = 0;
 
-    public ObjectPoolingManager(GameObject prefab)
+    public ObjectPoolingManager(GameObject prefab, Transform parent = null)
     {
         _prefab = prefab;
 
-        _parent = new GameObject(_prefab.name).transform;
+        if (null == parent)
+        {
+            _parent = new GameObject(_prefab.name).transform;
+        }
+        else
+        {
+            _parent = parent;
+        }
     }
 
     public void CreateObjectPool(int count)
@@ -27,12 +34,12 @@ public class ObjectPoolingManager
         }
     }
 
-    public List<Projectile> GetObjectPool()
+    public List<T> GetObjectPool()
     {
         return _objectPool;
     }
 
-    public Projectile GetObject()
+    public T GetObject()
     {
         if (0 == _disabledObjectIndexes.Count)
         {
@@ -48,9 +55,9 @@ public class ObjectPoolingManager
 
         ObjectPooling pooling = obj.AddComponent<ObjectPooling>();
 
-        Projectile projectile = obj.GetComponent<Projectile>();
+        T objComponent = obj.GetComponent<T>();
 
-        _objectPool.Add(projectile);
+        _objectPool.Add(objComponent);
 
         pooling.Init(_count);
         pooling.OnDisableEvent -= PushIndex;

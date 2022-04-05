@@ -10,6 +10,6 @@ public class Knife : Weapon
 
         GameObject prefab = Resources.Load<GameObject>("Projectile/Knife");
 
-        _objectPoolingManager = new ObjectPoolingManager(prefab);
+        _objectPoolingManager = new ObjectPoolingManager<Projectile>(prefab);
     }
 }
