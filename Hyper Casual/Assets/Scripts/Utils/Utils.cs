@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class Utils
 {
-    public static readonly Utils Instance = new Utils();
-
     public static readonly Vector2 ZERO_VECTOR2 = Vector2.zero;
     public static readonly Vector3 ZERO_VECTOR3 = Vector3.zero;
     public static readonly Quaternion IDEN_QUAT = Quaternion.identity;
 
-    public float CalculateAngle(Vector3 targetDir, Vector3 myForward)
+    public static float CalculateAngle(Vector3 targetDir, Vector3 myForward)
     {
         float dot = Mathf.Clamp(Vector3.Dot(targetDir, myForward), -1f, 1f);
 

@@ -55,9 +55,9 @@ public class ObjectPoolingManager<T>
 
         ObjectPooling pooling = obj.AddComponent<ObjectPooling>();
 
-        T projectile = obj.GetComponent<T>();
+        T objComponent = obj.GetComponent<T>();
 
-        _objectPool.Add(projectile);
+        _objectPool.Add(objComponent);
 
         pooling.Init(_count);
         pooling.OnDisableEvent -= PushIndex;

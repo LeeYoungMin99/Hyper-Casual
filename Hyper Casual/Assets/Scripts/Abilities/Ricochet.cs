@@ -51,7 +51,7 @@ public class Ricochet : Ability
 
             Vector3 targetDir = (_colliders[i].transform.position - transform.position).normalized;
 
-            float angle = Utils.Instance.CalculateAngle(targetDir, transform.forward);
+            float angle = Utils.CalculateAngle(targetDir, transform.forward);
 
             transform.rotation = Quaternion.Euler(0f, transform.eulerAngles.y + angle, 0f);
 

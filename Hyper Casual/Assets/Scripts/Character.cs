@@ -130,7 +130,7 @@ public abstract class Character : MonoBehaviour, IDamageable
         {
             damage *= criticalMultiplier;
             isCritical = true;
-            StartCoroutine(CameraShaker.Instance.ShakeCamera(0.5f));
+            CameraShaker.Instance.ShakeCamera(0.5f, 0.5f);
         }
 
         DamageTextManager.Instance.MarkDamageText(this, damage, isCritical);

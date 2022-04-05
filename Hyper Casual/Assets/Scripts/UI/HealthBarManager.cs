@@ -27,18 +27,18 @@ public class HealthBarManager : MonoBehaviour
         switch (type)
         {
             case EHealthBarType.Monster:
-                healthBar = Instantiate(_monsterHealthBar, _healthBarCanvas).GetComponent<HealthBar>();
+                healthBar = Instantiate(_monsterHealthBar, _healthBarCanvas);
                 healthBar.Owner = character.transform;
                 character.HealthChangeEvent -= healthBar.SetHealthBar;
                 character.HealthChangeEvent += healthBar.SetHealthBar;
                 break;
             case EHealthBarType.Boss:
-                healthBar = Instantiate(_bossHealthBar, _bossHealthBarCanvas).GetComponent<HealthBar>();
+                healthBar = Instantiate(_bossHealthBar, _bossHealthBarCanvas);
                 character.HealthChangeEvent -= healthBar.SetHealthBar;
                 character.HealthChangeEvent += healthBar.SetHealthBar;
                 break;
             case EHealthBarType.Player:
-                healthBar = Instantiate(_playerHealthBar, _healthBarCanvas).GetComponent<HealthBar>();
+                healthBar = Instantiate(_playerHealthBar, _healthBarCanvas);
                 healthBar.Owner = character.transform;
                 character.HealthChangeEvent -= healthBar.SetHealthBar;
                 character.HealthChangeEvent += healthBar.SetHealthBar;
