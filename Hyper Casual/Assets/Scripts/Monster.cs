@@ -14,6 +14,6 @@ public class Monster : Character
 
     public override void Death()
     {
-
+        ExperienceManager.Instance.CreateExperience(1000f, transform.position);
     }
 }

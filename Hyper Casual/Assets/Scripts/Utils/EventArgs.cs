@@ -10,3 +10,8 @@ public class HealthChangeEventArgs : EventArgs
     public float MaxHealth;
     public float CurHealth;
 }
+
+public class ExperienceEventArgs : EventArgs
+{
+    public float ExperienceAmount;
+}
