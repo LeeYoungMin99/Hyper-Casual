@@ -36,6 +36,9 @@ public class Player : Character
         InvokeChangeHealthEvent();
 
         Weapon = new Knife();
+
+        SlotMachine slotMachine = GameObject.Find("Slot Machine Canvas").transform.
+                                             Find("Slot Machine").GetComponent<SlotMachine>();
     }
 
     private void FixedUpdate()

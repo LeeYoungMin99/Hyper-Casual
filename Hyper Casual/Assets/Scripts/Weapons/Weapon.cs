@@ -14,14 +14,14 @@ public abstract class Weapon
 
     public virtual void Init()
     {
-        _abilities = new Ability[0];
+        _abilities = new Ability[6];
 
-        //_abilities[0] = new BouncyWall() { IsEnabled = true };
-        //_abilities[1] = new Ricochet() { IsEnabled = true };
-        //_abilities[2] = new Piercing() { IsEnabled = true };
-        //_abilities[3] = new Freeze() { IsEnabled = true };
-        //_abilities[4] = new Blaze() { IsEnabled = true };
-        //_abilities[5] = new Poison() { IsEnabled = true };
+        _abilities[0] = new BouncyWall() { IsEnabled = true };
+        _abilities[1] = new Ricochet() { IsEnabled = true };
+        _abilities[2] = new Piercing() { IsEnabled = true };
+        _abilities[3] = new Freeze() { IsEnabled = true };
+        _abilities[4] = new Blaze() { IsEnabled = true };
+        _abilities[5] = new Poison() { IsEnabled = true };
     }
 
     public void Attack(Transform transform,

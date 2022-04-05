@@ -22,7 +22,6 @@ public class ExperienceBar : MonoBehaviour
     {
         ExperienceManager.Instance.ExperienceGainer.GainExperienceEvent -= GainExperience;
         ExperienceManager.Instance.ExperienceGainer.GainExperienceEvent += GainExperience;
-        LevelUpEvent?.Invoke(this, EventArgs.Empty);
     }
 
     public void GainExperience(object sender, ExperienceEventArgs args)

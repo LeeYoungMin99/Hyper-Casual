@@ -15,3 +15,8 @@ public class ExperienceEventArgs : EventArgs
 {
     public float ExperienceAmount;
 }
+
+public class AbilityEventArgs : EventArgs
+{
+    public EAbilityTag Ability;
+}
