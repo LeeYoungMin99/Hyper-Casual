@@ -8,39 +8,37 @@ public class BouncyWall : Ability
     private Ray _ray = new Ray();
     private const int MAX_BOUNCE_COUNT = 3;
 
-    public override void InvokeAbility(Transform transform,
-                                       Collider other,
-                                       float criticalMultiplier,
-                                       float CriticalRate,
-                                   ref float damage,
-                                   ref int wallBounce,
-                                   ref int monsterBounce,
-                                   ref bool isActive,
-                                   ref bool isFreeze,
-                                   ref bool isBlaze,
-                                   ref bool isPoisonous)
+    public BouncyWall()
     {
-        if (false == IsEnabled) return;
+        Order = 3;
+    }
 
-        if (LayerValue.MAP_OBJECT_LAYER != other.gameObject.layer) return;
+    public override void ApplyAbility(Player character, Weapon weapon)
+    {
+        weapon.AddAbility(this);
+    }
 
-        if (MAX_BOUNCE_COUNT <= wallBounce) return;
+    public override bool InvokeAbility(Projectile projectile, Collider other)
+    {
+        if (LayerValue.WALL_LAYER != other.gameObject.layer) return false;
 
-        isActive = true;
+        if (MAX_BOUNCE_COUNT <= projectile.WallBounceCount) return false;
 
-        ++wallBounce;
+        ++projectile.WallBounceCount;
 
-        damage *= 0.5f;
+        projectile.Damage *= 0.5f;
 
-        _ray.origin = transform.position;
-        _ray.direction = transform.forward;
+        _ray.origin = projectile.transform.position;
+        _ray.direction = projectile.transform.forward;
 
-        other.Raycast(_ray, out _hit, 30f);
+        other.Raycast(_ray, out _hit, 10f);
 
-        Vector3 reflect = Vector3.Reflect(transform.forward, _hit.normal).normalized;
+        Vector3 reflect = Vector3.Reflect(projectile.transform.forward, _hit.normal).normalized;
 
-        float angle = Utils.CalculateAngle(reflect, transform.forward);
+        float angle = Utils.CalculateAngle(reflect, projectile.transform.forward);
 
-        transform.rotation = Quaternion.Euler(0f, transform.eulerAngles.y + angle, 0f);
+        projectile.transform.rotation = Quaternion.Euler(0f, projectile.transform.eulerAngles.y + angle, 0f);
+
+        return true;
     }
 }

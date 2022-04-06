@@ -18,5 +18,5 @@ public class ExperienceEventArgs : EventArgs
 
 public class AbilityEventArgs : EventArgs
 {
-    public EAbilityTag Ability;
+    public Ability Ability;
 }

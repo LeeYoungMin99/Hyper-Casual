@@ -3,27 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class Player : Character
 {
     [SerializeField] private Joystick _joystick;
 
-    public Weapon Weapon;
 
-    public float AttackSpeed = 1f;
-    public float CriticalMultiplier = 2f;
-    public float CriticalRate = 0f;
-
-    public int AttackCount = 1;
-    public int FrontFireCount = 1;
-    public int RearFireCount = 1;
-    public int SideFireCount = 1;
-    public int DiagonalFireCount = 1;
-
+    private Weapon _weapon;
     private Collider _target;
     private Collider[] _colliders = new Collider[16];
-    private Coroutine _extraAttackCoroutine;
     private RaycastHit _hit;
     private bool _isMove = false;
+    [SerializeField] private float _attackSpeed = 1f;
+    [SerializeField] private float _criticalMultiplier = 2f;
+    [SerializeField] private float _criticalRate = 0f;
+    [SerializeField] private int _attackCount = 1;
+    [SerializeField] private int _frontAttackCount = 1;
+    [SerializeField] private int _rearAttackCount = 1;
+    [SerializeField] private int _sideAttackCount = 1;
+    [SerializeField] private int _diagonalAttackCount = 1;
 
     private const float ATTACK_INTERVAL_TIME = 0.1f;
     private const float SEARCH_DISTANCE = 50f;
@@ -35,31 +34,31 @@ public class Player : Character
         HealthBarManager.Instance.CreateHealthBar(this, EHealthBarType.Player);
         InvokeChangeHealthEvent();
 
-        Weapon = new Knife();
+        _weapon = new Knife();
 
         SlotMachine slotMachine = GameObject.Find("Slot Machine Canvas").transform.
                                              Find("Slot Machine").GetComponent<SlotMachine>();
+
+        slotMachine.AbilityGainEvent -= ApplyAbility;
+        slotMachine.AbilityGainEvent += ApplyAbility;
+
+
     }
 
-    private void FixedUpdate()
+    protected override void FixedUpdateAct()
     {
         float x = _joystick.Horizontal;
         float z = _joystick.Vertical;
 
         Vector3 moveVec = new Vector3(x, 0f, z);
 
-        if (0 == moveVec.sqrMagnitude)
-        {
-            _isMove = false;
-        }
-        else
+        _isMove = false;
+
+        if (0 != moveVec.sqrMagnitude)
         {
             _isMove = true;
 
-            if (null != _extraAttackCoroutine)
-            {
-                StopCoroutine(_extraAttackCoroutine);
-            }
+            StopAllCoroutines();
 
             moveVec *= MoveSpeed * Time.deltaTime;
 
@@ -68,7 +67,7 @@ public class Player : Character
 
             _rigidbody.MoveRotation(moveQuat);
 
-            if (false == Physics.Raycast(_rigidbody.position, moveVec, 1f, LayerValue.MAP_OBJECT_LAYER_MASK))
+            if (false == Physics.Raycast(_rigidbody.position, moveVec, 1f, LayerValue.WALL_LAYER_MASK))
             {
                 _rigidbody.MovePosition(_rigidbody.position + moveVec);
             }
@@ -77,13 +76,8 @@ public class Player : Character
         _animator.SetBool(AnimationID.IS_MOVE, _isMove);
     }
 
-    private void Update()
+    protected override void UpdateAct()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1)) TakeDamage(9999f, 9999f, 100f, false, false, false);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) TakeDamage(10f, 1f, 50f, true, false, false);
-        if (Input.GetKeyDown(KeyCode.Alpha3)) TakeDamage(10f, 1f, 50f, false, true, false);
-        if (Input.GetKeyDown(KeyCode.Alpha4)) TakeDamage(10f, 1f, 50f, false, false, true);
-
         if (true == _isMove || null == _target)
         {
             _target = FindNearTarget();
@@ -108,30 +102,81 @@ public class Player : Character
         _rigidbody.velocity = Vector3.zero;
     }
 
-    public override void Death()
+    public void AttackDamageUp(float multiplier)
     {
+        _attackDamage *= multiplier;
+    }
 
+    public void AttackSpeedUp(float multiplier)
+    {
+        _attackSpeed *= multiplier;
+
+        _animator.SetFloat(AnimationID.ATTACK_SPEED, _attackSpeed);
+    }
+
+    public void CriticalUp(float multiplier, float rate)
+    {
+        _criticalMultiplier *= multiplier;
+        _criticalRate += rate;
+    }
+
+    public void MaxHealthUp(float multiplier)
+    {
+        _maxHealth *= multiplier;
+        _curHealth *= multiplier;
+
+        InvokeChangeHealthEvent();
+    }
+
+    public void MultiShot()
+    {
+        _attackCount += 1;
+    }
+
+    public void FrontArrow()
+    {
+        _frontAttackCount += 1;
+    }
+
+    public void DiagonalArrows()
+    {
+        _diagonalAttackCount += 1;
+    }
+
+    public void SideArrows()
+    {
+        _sideAttackCount += 1;
+    }
+
+    public void RearArrow()
+    {
+        _rearAttackCount += 1;
+    }
+
+    protected override void Death()
+    {
+        base.Death();
     }
 
     private void Attack()
     {
-        AttackHelper(AttackCount);
+        AttackHelper(_attackCount);
     }
 
     private void AttackHelper(int count)
     {
-        Weapon.Attack(transform,
-                      Damage,
-                      CriticalMultiplier,
-                      CriticalRate,
-                      FrontFireCount,
-                      RearFireCount,
-                      SideFireCount,
-                      DiagonalFireCount);
+        _weapon.Attack(transform,
+                      _attackDamage,
+                      _criticalMultiplier,
+                      _criticalRate,
+                      _frontAttackCount,
+                      _rearAttackCount,
+                      _sideAttackCount,
+                      _diagonalAttackCount);
 
         if (2 > count) return;
 
-        _extraAttackCoroutine = StartCoroutine(ExtraAttack(count - 1));
+        StartCoroutine(ExtraAttack(count - 1));
     }
 
     private IEnumerator ExtraAttack(int attackCount)
@@ -144,7 +189,7 @@ public class Player : Character
 
         if (0 >= attackCount) yield break;
 
-        _extraAttackCoroutine = StartCoroutine(ExtraAttack(attackCount));
+        StartCoroutine(ExtraAttack(attackCount));
     }
 
     private void LookatTarget()
@@ -178,12 +223,17 @@ public class Player : Character
 
             Physics.Raycast(transform.position, targetDir, out _hit, SEARCH_DISTANCE);
 
-            if (LayerValue.MAP_OBJECT_LAYER == _hit.transform.gameObject.layer) continue;
+            if (LayerValue.WALL_LAYER == _hit.transform.gameObject.layer) continue;
 
             minDistance = distance;
             target = _colliders[i];
         }
 
         return target;
+    }
+
+    private void ApplyAbility(object sender, AbilityEventArgs args)
+    {
+        args.Ability.ApplyAbility(this, _weapon);
     }
 }

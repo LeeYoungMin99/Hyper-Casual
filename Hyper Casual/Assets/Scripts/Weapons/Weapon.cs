@@ -4,7 +4,20 @@ using UnityEngine;
 
 public abstract class Weapon
 {
-    protected Ability[] _abilities;
+    public class AddComparer : IComparer<Ability>
+    {
+        public int Compare(Ability x, Ability y)
+        {
+            if (x.Order < y.Order) return -1;
+
+            if (x.Order > y.Order) return 1;
+
+            return 0;
+        }
+    }
+
+    protected List<Ability> _abilities = new List<Ability>();
+    protected AddComparer _addComparer = new AddComparer();
     protected ObjectPoolingManager<Projectile> _objectPoolingManager;
 
     public Weapon()
@@ -12,17 +25,7 @@ public abstract class Weapon
         Init();
     }
 
-    public virtual void Init()
-    {
-        _abilities = new Ability[6];
-
-        _abilities[0] = new BouncyWall() { IsEnabled = true };
-        _abilities[1] = new Ricochet() { IsEnabled = true };
-        _abilities[2] = new Piercing() { IsEnabled = true };
-        _abilities[3] = new Freeze() { IsEnabled = true };
-        _abilities[4] = new Blaze() { IsEnabled = true };
-        _abilities[5] = new Poison() { IsEnabled = true };
-    }
+    public abstract void Init();
 
     public void Attack(Transform transform,
                        float damage,
@@ -59,31 +62,32 @@ public abstract class Weapon
         }
     }
 
-    public Vector3 CalculatePosition(Transform transform, Vector3 dir, int maxCount, int curCount)
+    public void AddAbility(Ability ability)
+    {
+        _abilities.Add(ability);
+
+        _abilities.Sort(_addComparer.Compare);
+    }
+
+    private Vector3 CalculateProjectilePosition(Transform transform, Vector3 dir, int maxCount, int curCount)
     {
         Vector3 startPosition = transform.position + dir * (0.1f * (maxCount - 1));
 
         return startPosition + dir * (-0.2f * curCount);
     }
 
-    public void Fire(float damage, float criticalMultiplier, float criticalRate, float angle, Vector3 position)
+    private void Fire(float damage, float criticalMultiplier, float criticalRate, float angle, Vector3 position)
     {
         Projectile projectile = _objectPoolingManager.GetObject();
 
-        projectile.Damage = damage;
-        projectile.CriticalMultiplier = criticalMultiplier;
-        projectile.CriticalRate = criticalRate;
-        projectile.Abilities = _abilities;
-        projectile.gameObject.transform.position = position;
-        projectile.gameObject.transform.rotation = Quaternion.Euler(0f, angle, 0f);
-        projectile.gameObject.SetActive(true);
+        projectile.Init(damage, criticalMultiplier, criticalRate, _abilities, position, angle);
     }
 
-    public void FireHelper(Transform transform, float damage, float criticalMultiplier, float criticalRate, Vector3 dir, float angle, int maxFireCount)
+    private void FireHelper(Transform transform, float damage, float criticalMultiplier, float criticalRate, Vector3 dir, float angle, int maxFireCount)
     {
         for (int i = 0; i < maxFireCount; ++i)
         {
-            Vector3 position = CalculatePosition(transform, dir, maxFireCount, i);
+            Vector3 position = CalculateProjectilePosition(transform, dir, maxFireCount, i);
 
             Fire(damage, criticalMultiplier, criticalRate, angle, position);
         }

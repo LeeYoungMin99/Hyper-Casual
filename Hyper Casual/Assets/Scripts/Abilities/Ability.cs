@@ -4,35 +4,28 @@ using UnityEngine;
 
 public enum EAbilityTag
 {
-    AttackDamageUp  ,
-    AttackSppedUp   ,
-    CriticalUp      ,
-    MaxHealthUp     ,
-    MultiShot       ,
-    FrontArrow      ,
-    DiagonalArrows  ,
-    SideArrows      ,
-    RearArrow       ,  
-    Piercing        ,
-    Ricochet        ,
-    BouncyWall      ,
-    WallWalker      ,
-    WaterWalker
+    AttackDamageUp,
+    AttackSppedUp,
+    CriticalUp,
+    MaxHealthUp,
+    FrontArrow,
+    DiagonalArrows,
+    SideArrows,
+    RearArrow,
+    MultiShot,
+    Piercing,
+    Ricochet,
+    BouncyWall,
+    Blaze,
+    Freeze,
+    Poison
 }
 
 public abstract class Ability
 {
-    public bool IsEnabled = false;
+    public int Order = 0;
 
-    public abstract void InvokeAbility(Transform transform,
-                                       Collider other,
-                                       float criticalMultiplier,
-                                       float CriticalRate,
-                                   ref float damage,
-                                   ref int wallBounce,
-                                   ref int monsterBounce,
-                                   ref bool isActive,
-                                   ref bool isFreeze,
-                                   ref bool isBlaze,
-                                   ref bool isPoisonous);
+    public virtual void ApplyAbility(Player character, Weapon weapon) { }
+
+    public virtual bool InvokeAbility(Projectile projectile, Collider other) { return false; }
 }

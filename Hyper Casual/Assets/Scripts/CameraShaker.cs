@@ -31,7 +31,7 @@ public class CameraShaker : MonoBehaviour
 
         if (null != _cameraShakeCoroutine) return;
 
-        StartCoroutine(ShakeCamera());
+        _cameraShakeCoroutine = StartCoroutine(ShakeCamera());
     }
 
     public IEnumerator ShakeCamera()
@@ -43,6 +43,7 @@ public class CameraShaker : MonoBehaviour
             yield return null;
         }
 
+        _cameraShakeCoroutine = null;
         _cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0f;
         _duration = 0f;
     }

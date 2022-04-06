@@ -5,124 +5,106 @@ using UnityEngine;
 
 public abstract class Character : MonoBehaviour, IDamageable
 {
-    public float MaxHealth;
-    public float CurHealth;
-    public float Damage;
     public float MoveSpeed;
 
     public event EventHandler<HealthChangeEventArgs> HealthChangeEvent;
 
     protected Rigidbody _rigidbody;
     protected Animator _animator;
+    protected float _attackDamage = 0.001f;
+    protected float _maxHealth = 100;
+    protected float _curHealth = 100;
+
+    private bool _canAct;
+
+    private List<StatusEffect> _statusEffects = new List<StatusEffect>();
 
     private HealthChangeEventArgs _healthChangeEventArgs = new HealthChangeEventArgs();
-    private bool _isFreeze = false;
-    private bool _isBlaze = false;
-    private bool _isPoisonous = false;
-
-    private const float DURATION = 2f;
-    private const float BLAZE_DAMAGE_MULTIPLIER = 0.18f;
-    private const float BLAZE_INTERVAL_TIME = 2f;
-    private const float BLAZE_TICK_COUNT = 2f;
-    private const float POISON_DAMAGE_MULTIPLIER = 0.35f;
-    private const float POISON_INTERVAL_TIME = 2f;
-
-    public abstract void Death();
 
     protected virtual void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
+
+        AddStatusEffect(new FreezeEffect());
     }
 
     private void OnEnable()
     {
         _rigidbody.detectCollisions = true;
+    }
 
-        _isFreeze = false;
-        _isBlaze = false;
-        _isPoisonous = false;
+    private void FixedUpdate()
+    {
+        _canAct = true;
+
+        int count = _statusEffects.Count;
+        for (int i = 0; i < count; ++i)
+        {
+            if (false == _statusEffects[i].Update(this))
+            {
+                _canAct = false;
+            }
+        }
+
+        //_animator.SetBool(AnimationID.CAN_ACT, _canAct);
+        if (false == _canAct) return;
+
+        FixedUpdateAct();
+    }
+
+    private void Update()
+    {
+        if (false == _canAct) return;
+
+        UpdateAct();
     }
 
     public void TakeDamage(float damage,
                            float criticalMultiplier,
-                           float criticalRate,
-                           bool isFreeze,
-                           bool isBlaze,
-                           bool isPoisonous)
+                           float criticalRate)
     {
-        if (true == isFreeze)
-        {
-            if (false == _isFreeze)
-            {
-                StartCoroutine(Freeze());
-            }
-        }
-
-        if (true == isBlaze)
-        {
-            if (false == _isBlaze)
-            {
-                StartCoroutine(Blaze(damage * BLAZE_DAMAGE_MULTIPLIER, criticalMultiplier, criticalRate));
-            }
-        }
-
-        if (true == isPoisonous)
-        {
-            if (false == _isPoisonous)
-            {
-                StartCoroutine(Poison(damage * POISON_DAMAGE_MULTIPLIER, criticalMultiplier, criticalRate));
-            }
-        }
-
         TakeDamageHelper(damage, criticalMultiplier, criticalRate);
     }
 
-    public IEnumerator Freeze()
+    public void AddStatusEffect(StatusEffect statusEffect)
     {
-        _isFreeze = true;
-
-        yield return new WaitForSeconds(DURATION);
-
-        _isFreeze = false;
+        _statusEffects.Add(statusEffect);
     }
 
-    public IEnumerator Blaze(float damage, float criticalMultiplier, float criticalRate)
+    public T GetStatusEffect<T>() where T : StatusEffect
     {
-        _isBlaze = true;
-
-        for (int i = 0; i < BLAZE_TICK_COUNT; ++i)
+        int count = _statusEffects.Count;
+        for (int i = 0; i < count; ++i)
         {
-            yield return new WaitForSeconds(BLAZE_INTERVAL_TIME);
+            if (false == (_statusEffects[i].GetType() == typeof(T))) continue;
 
-            TakeDamageHelper(damage, criticalMultiplier, criticalRate);
+            return (T)_statusEffects[i];
         }
 
-        _isBlaze = false;
+        return default(T);
     }
 
-    public IEnumerator Poison(float damage, float criticalMultiplier, float criticalRate)
+    protected virtual void FixedUpdateAct() { }
+    protected virtual void UpdateAct() { }
+
+    protected virtual void Death()
     {
-        _isPoisonous = true;
+        _rigidbody.detectCollisions = false;
 
-        while (true)
-        {
-            yield return new WaitForSeconds(POISON_INTERVAL_TIME);
+        StopAllCoroutines();
 
-            TakeDamageHelper(damage, criticalMultiplier, criticalRate);
-        }
+        HealthChangeEvent = null;
     }
 
-    public bool CalculateCritical(float criticalRate)
+    protected void InvokeChangeHealthEvent()
     {
-        if (0f >= criticalRate) return false;
-
-        if (UnityEngine.Random.Range(0f, 100f) >= criticalRate) return false;
-
-        return true;
+        _healthChangeEventArgs.MaxHealth = _maxHealth;
+        _healthChangeEventArgs.CurHealth = _curHealth;
+        HealthChangeEvent?.Invoke(this, _healthChangeEventArgs);
     }
 
-    public void TakeDamageHelper(float damage, float criticalMultiplier, float criticalRate)
+    private void TakeDamageHelper(float damage, float criticalMultiplier, float criticalRate)
     {
         bool isCritical = false;
 
@@ -134,25 +116,21 @@ public abstract class Character : MonoBehaviour, IDamageable
         }
 
         DamageTextManager.Instance.MarkDamageText(this, damage, isCritical);
-        CurHealth -= damage;
+        _curHealth -= damage;
 
         InvokeChangeHealthEvent();
 
-        if (0f < CurHealth) return;
-
-        _rigidbody.detectCollisions = false;
-
-        StopAllCoroutines();
-
-        HealthChangeEvent = null;
+        if (0f < _curHealth) return;
 
         Death();
     }
 
-    public void InvokeChangeHealthEvent()
+    private bool CalculateCritical(float criticalRate)
     {
-        _healthChangeEventArgs.MaxHealth = MaxHealth;
-        _healthChangeEventArgs.CurHealth = CurHealth;
-        HealthChangeEvent?.Invoke(this, _healthChangeEventArgs);
+        if (0f >= criticalRate) return false;
+
+        if (UnityEngine.Random.Range(0f, 100f) >= criticalRate) return false;
+
+        return true;
     }
 }

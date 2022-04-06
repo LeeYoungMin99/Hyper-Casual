@@ -4,26 +4,25 @@ using UnityEngine;
 
 public class Piercing : Ability
 {
-    public override void InvokeAbility(Transform transform,
-                                       Collider other,
-                                       float criticalMultiplier,
-                                       float CriticalRate,
-                                   ref float damage,
-                                   ref int wallBounce,
-                                   ref int monsterBounce,
-                                   ref bool isActive,
-                                   ref bool isFreeze,
-                                   ref bool isBlaze,
-                                   ref bool isPoisonous)
+    public Piercing()
     {
-        if (false == IsEnabled) return;
+        Order = 1;
+    }
 
-        if (LayerValue.MAP_OBJECT_LAYER == other.gameObject.layer) return;
+    public override void ApplyAbility(Player character, Weapon weapon)
+    {
+        weapon.AddAbility(this);
+    }
 
-        if (true == isActive) return;
+    public override bool InvokeAbility(Projectile projectile, Collider other)
+    {
+        if (LayerValue.WALL_LAYER == other.gameObject.layer) return false;
 
-        isActive = true;
+        int bounceCount = projectile.MonsterBounceCount;
+        if (0 < bounceCount && bounceCount < 3) return false;
 
-        damage *= 0.67f;
+        projectile.Damage *= 0.67f;
+
+        return true;
     }
 }
