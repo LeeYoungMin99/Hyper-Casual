@@ -4,7 +4,20 @@ using UnityEngine;
 
 public abstract class Weapon
 {
-    protected Ability[] _abilities;
+    public class AddComparer : IComparer<Ability>
+    {
+        public int Compare(Ability x, Ability y)
+        {
+            if (x.Order < y.Order) return -1;
+
+            if (x.Order > y.Order) return 1;
+
+            return 0;
+        }
+    }
+
+    protected List<Ability> _abilities = new List<Ability>();
+    protected AddComparer _addComparer = new AddComparer();
     protected ObjectPoolingManager<Projectile> _objectPoolingManager;
 
     public Weapon()
@@ -14,14 +27,6 @@ public abstract class Weapon
 
     public virtual void Init()
     {
-        _abilities = new Ability[6];
-
-        _abilities[0] = new BouncyWall() { IsEnabled = true };
-        _abilities[1] = new Ricochet() { IsEnabled = true };
-        _abilities[2] = new Piercing() { IsEnabled = true };
-        _abilities[3] = new Freeze() { IsEnabled = true };
-        _abilities[4] = new Blaze() { IsEnabled = true };
-        _abilities[5] = new Poison() { IsEnabled = true };
     }
 
     public void Attack(Transform transform,
@@ -70,13 +75,7 @@ public abstract class Weapon
     {
         Projectile projectile = _objectPoolingManager.GetObject();
 
-        projectile.Damage = damage;
-        projectile.CriticalMultiplier = criticalMultiplier;
-        projectile.CriticalRate = criticalRate;
-        projectile.Abilities = _abilities;
-        projectile.gameObject.transform.position = position;
-        projectile.gameObject.transform.rotation = Quaternion.Euler(0f, angle, 0f);
-        projectile.gameObject.SetActive(true);
+        projectile.Init(damage, criticalMultiplier, criticalRate, _abilities, position, angle);
     }
 
     public void FireHelper(Transform transform, float damage, float criticalMultiplier, float criticalRate, Vector3 dir, float angle, int maxFireCount)
@@ -87,5 +86,12 @@ public abstract class Weapon
 
             Fire(damage, criticalMultiplier, criticalRate, angle, position);
         }
+    }
+
+    public void AddAbility(Ability ability)
+    {
+        _abilities.Add(ability);
+
+        _abilities.Sort(_addComparer.Compare);
     }
 }

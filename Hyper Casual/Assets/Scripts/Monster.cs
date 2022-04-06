@@ -12,8 +12,10 @@ public class Monster : Character
         InvokeChangeHealthEvent();
     }
 
-    public override void Death()
+    protected override void Death()
     {
+        base.Death();
+
         ExperienceManager.Instance.CreateExperience(1000f, transform.position);
     }
 }

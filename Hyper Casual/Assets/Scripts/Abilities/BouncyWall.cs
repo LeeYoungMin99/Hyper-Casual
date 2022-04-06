@@ -8,25 +8,29 @@ public class BouncyWall : Ability
     private Ray _ray = new Ray();
     private const int MAX_BOUNCE_COUNT = 3;
 
+    public BouncyWall()
+    {
+        Order = 3;
+    }
+
+    public override void ApplyAbility(Player character, Weapon weapon)
+    {
+        weapon.AddAbility(this);
+    }
+
     public override void InvokeAbility(Transform transform,
                                        Collider other,
                                        float criticalMultiplier,
                                        float CriticalRate,
                                    ref float damage,
                                    ref int wallBounce,
-                                   ref int monsterBounce,
-                                   ref bool isActive,
-                                   ref bool isFreeze,
-                                   ref bool isBlaze,
-                                   ref bool isPoisonous)
+                                   ref int monsterBounce)
     {
-        if (false == IsEnabled) return;
-
         if (LayerValue.MAP_OBJECT_LAYER != other.gameObject.layer) return;
 
         if (MAX_BOUNCE_COUNT <= wallBounce) return;
 
-        isActive = true;
+        transform.gameObject.SetActive(true);
 
         ++wallBounce;
 

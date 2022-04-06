@@ -5,10 +5,18 @@ using UnityEngine;
 public class Ricochet : Ability
 {
     private Collider[] _colliders = new Collider[8];
-    private RaycastHit _hit;
-    private Ray _ray = new Ray();
 
     private const int MAX_BOUNCE_COUNT = 3;
+
+    public Ricochet()
+    {
+        Order = 2;
+    }
+
+    public override void ApplyAbility(Player character, Weapon weapon)
+    {
+        weapon.AddAbility(this);
+    }
 
     public override void InvokeAbility(Transform transform,
                                        Collider other,
@@ -16,19 +24,11 @@ public class Ricochet : Ability
                                        float CriticalRate,
                                    ref float damage,
                                    ref int wallBounce,
-                                   ref int monsterBounce,
-                                   ref bool isActive,
-                                   ref bool isFreeze,
-                                   ref bool isBlaze,
-                                   ref bool isPoisonous)
+                                   ref int monsterBounce)
     {
-        if (false == IsEnabled) return;
-
         if (LayerValue.MAP_OBJECT_LAYER == other.gameObject.layer) return;
 
         if (MAX_BOUNCE_COUNT <= monsterBounce) return;
-
-        isActive = true;
 
         ++monsterBounce;
 
@@ -38,12 +38,9 @@ public class Ricochet : Ability
 
         if (count == 0) return;
 
-        _ray.origin = transform.position;
-        _ray.direction = transform.forward;
+        transform.gameObject.SetActive(true);
 
-        other.Raycast(_ray, out _hit, 10f);
-
-        transform.position = _hit.point;
+        transform.position += transform.forward * (Time.deltaTime * 20f);
 
         for (int i = 0; i < count; ++i)
         {

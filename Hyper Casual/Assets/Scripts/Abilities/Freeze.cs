@@ -4,20 +4,18 @@ using UnityEngine;
 
 public class Freeze : Ability
 {
-    public override void InvokeAbility(Transform transform, 
-                                       Collider other, 
-                                       float criticalMultiplier, 
-                                       float CriticalRate, 
-                                   ref float damage, 
-                                   ref int wallBounce, 
-                                   ref int monsterBounce, 
-                                   ref bool isActive, 
-                                   ref bool isFreeze, 
-                                   ref bool isBlaze, 
-                                   ref bool isPoisonous)
+    public override void ApplyAbility(Player character, Weapon weapon)
     {
-        if (false == IsEnabled) return;
+        weapon.AddAbility(this);
+    }
 
-        isFreeze = true;
+    public override void InvokeAbility(Transform transform,
+                                       Collider other,
+                                       float criticalMultiplier,
+                                       float CriticalRate,
+                                   ref float damage,
+                                   ref int wallBounce,
+                                   ref int monsterBounce)
+    {
     }
 }

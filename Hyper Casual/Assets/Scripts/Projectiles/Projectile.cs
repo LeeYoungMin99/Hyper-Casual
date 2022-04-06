@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public Ability[] Abilities;
-    public Rigidbody Rigidbody;
+    public List<Ability> Abilities;
 
     public float CriticalMultiplier = 2f;
     public float CriticalRate = 0f;
@@ -15,9 +14,11 @@ public class Projectile : MonoBehaviour
     public int WallBounceCount = 0;
     public int MonsterBounceCount = 0;
 
+    private Rigidbody _rigidbody;
+
     private void Awake()
     {
-        Rigidbody = GetComponent<Rigidbody>();
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     private void OnDisable()
@@ -28,17 +29,12 @@ public class Projectile : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Rigidbody.MovePosition(transform.position + (transform.forward * (MoveSpeed * Time.deltaTime)));
+        _rigidbody.MovePosition(transform.position + (transform.forward * (MoveSpeed * Time.deltaTime)));
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        bool isActive = false;
-        bool isFreeze = false;
-        bool isBruning = false;
-        bool isPoisonous = false;
-
-        int count = Abilities.Length;
+        int count = Abilities.Count;
         for (int i = 0; i < count; ++i)
         {
             Abilities[i].InvokeAbility(transform,
@@ -47,23 +43,25 @@ public class Projectile : MonoBehaviour
                                        CriticalRate,
                                    ref Damage,
                                    ref WallBounceCount,
-                                   ref MonsterBounceCount,
-                                   ref isActive,
-                                   ref isFreeze,
-                                   ref isBruning,
-                                   ref isPoisonous);
+                                   ref MonsterBounceCount);
         }
 
         if (LayerValue.MAP_OBJECT_LAYER != other.gameObject.layer)
         {
             other.GetComponent<IDamageable>().TakeDamage(Damage,
                                                          CriticalMultiplier,
-                                                         CriticalRate,
-                                                         isFreeze,
-                                                         isBruning,
-                                                         isPoisonous);
+                                                         CriticalRate);
         }
+    }
 
-        gameObject.SetActive(isActive);
+    public void Init(float damage, float criticalMultiplier, float criticalRate, List<Ability> abilities, Vector3 position, float angle)
+    {
+        Damage = damage;
+        CriticalMultiplier = criticalMultiplier;
+        CriticalRate = criticalRate;
+        Abilities = abilities;
+        transform.SetPositionAndRotation(position, Quaternion.Euler(0f, angle, 0f));
+
+        gameObject.SetActive(true);
     }
 }
