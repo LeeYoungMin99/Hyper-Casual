@@ -16,21 +16,16 @@ public enum EAbilityTag
     Piercing,
     Ricochet,
     BouncyWall,
-    WallWalker,
-    WaterWalker
+    Blaze,
+    Freeze,
+    Poison
 }
 
 public abstract class Ability
 {
     public int Order = 0;
 
-    public abstract void InvokeAbility(Transform transform,
-                                       Collider other,
-                                       float criticalMultiplier,
-                                       float CriticalRate,
-                                   ref float damage,
-                                   ref int wallBounce,
-                                   ref int monsterBounce);
+    public virtual void ApplyAbility(Player character, Weapon weapon) { }
 
-    public abstract void ApplyAbility(Player character, Weapon weapon);
+    public virtual bool InvokeAbility(Projectile projectile, Collider other) { return false; }
 }

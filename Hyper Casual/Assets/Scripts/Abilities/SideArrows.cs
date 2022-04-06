@@ -8,6 +8,4 @@ public class SideArrows : Ability
     {
         character.SideArrows();
     }
-
-    public override void InvokeAbility(Transform transform, Collider other, float criticalMultiplier, float CriticalRate, ref float damage, ref int wallBounce, ref int monsterBounce) { }
 }

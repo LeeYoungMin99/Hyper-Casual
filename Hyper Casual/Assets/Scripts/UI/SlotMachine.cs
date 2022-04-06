@@ -55,23 +55,25 @@ public class SlotMachine : MonoBehaviour
         _abilities[EAbilityTag.Piercing] = new Piercing();
         _abilities[EAbilityTag.Ricochet] = new Ricochet();
         _abilities[EAbilityTag.BouncyWall] = new BouncyWall();
-        //_abilities[EAbilityTag.WallWalker]    = 
-        //_abilities[EAbilityTag.WaterWalker]   = 
+        _abilities[EAbilityTag.Blaze] = new Blaze();
+        _abilities[EAbilityTag.Freeze] = new Freeze();
+        _abilities[EAbilityTag.Poison] = new Poison();
 
         _nameOfAbilities[EAbilityTag.AttackDamageUp] = "공격력 증가";
         _nameOfAbilities[EAbilityTag.AttackSppedUp] = "공격속도 증가";
         _nameOfAbilities[EAbilityTag.CriticalUp] = "크리티컬 증가";
         _nameOfAbilities[EAbilityTag.MaxHealthUp] = "최대 체력 증가";
-        _nameOfAbilities[EAbilityTag.FrontArrow] = "전방 화살 +1";
-        _nameOfAbilities[EAbilityTag.DiagonalArrows] = "사선 화살 +1";
-        _nameOfAbilities[EAbilityTag.SideArrows] = "측면 화살 +1";
-        _nameOfAbilities[EAbilityTag.RearArrow] = "후방 화살 +1";
+        _nameOfAbilities[EAbilityTag.FrontArrow] = "전방 투사체 +1";
+        _nameOfAbilities[EAbilityTag.DiagonalArrows] = "사선 투사체 +1";
+        _nameOfAbilities[EAbilityTag.SideArrows] = "측면 투사체 +1";
+        _nameOfAbilities[EAbilityTag.RearArrow] = "후방 투사체 +1";
         _nameOfAbilities[EAbilityTag.MultiShot] = "멀티 샷";
         _nameOfAbilities[EAbilityTag.Piercing] = "관통";
         _nameOfAbilities[EAbilityTag.Ricochet] = "쓰리쿠션";
         _nameOfAbilities[EAbilityTag.BouncyWall] = "벽 반사";
-        _nameOfAbilities[EAbilityTag.WallWalker] = "물 위를 걷는 자";
-        _nameOfAbilities[EAbilityTag.WaterWalker] = "벽을 뚫는 자";
+        _nameOfAbilities[EAbilityTag.Blaze] = "화염";
+        _nameOfAbilities[EAbilityTag.Freeze] = "얼음";
+        _nameOfAbilities[EAbilityTag.Poison] = "독";
 
         _descriptionOfAbilities[EAbilityTag.AttackDamageUp] = "공격력이 20% 증가합니다.";
         _descriptionOfAbilities[EAbilityTag.AttackSppedUp] = "공격속도가 25% 증가합니다.";
@@ -85,8 +87,9 @@ public class SlotMachine : MonoBehaviour
         _descriptionOfAbilities[EAbilityTag.Piercing] = "공격이 몬스터를 관통합니다.";
         _descriptionOfAbilities[EAbilityTag.Ricochet] = "명중한 투사체가 주변 몬스터를 향합니다.";
         _descriptionOfAbilities[EAbilityTag.BouncyWall] = "화살이 벽에 맞으면 튕겨납니다.";
-        _descriptionOfAbilities[EAbilityTag.WallWalker] = "물 위를 걸을 수 있습니다.";
-        _descriptionOfAbilities[EAbilityTag.WaterWalker] = "벽을 관통할 수 있습니다.";
+        _descriptionOfAbilities[EAbilityTag.Blaze] = "공격이 적을 불태웁니다.";
+        _descriptionOfAbilities[EAbilityTag.Freeze] = "공격이 적을 얼립니다.";
+        _descriptionOfAbilities[EAbilityTag.Poison] = "공격이 적을 중독시킵니다.";
 
         ExperienceBar experienceBar = GameObject.Find("Canvas").transform.
                                       Find("Experience Bar").GetComponent<ExperienceBar>();
@@ -109,7 +112,7 @@ public class SlotMachine : MonoBehaviour
         int imageCount = _abilityTagToSprite.Count;
         for (int i = 0; i < _slotImages.Count; ++i)
         {
-            int randomIndex;
+            int randomIndex = UnityEngine.Random.Range(0, imageCount);
 
             count = _slotImages[i].SlotImages.Count - 1;
             for (int j = 0; j < count; ++j)
@@ -124,6 +127,8 @@ public class SlotMachine : MonoBehaviour
 
                     do
                     {
+                        randomIndex = UnityEngine.Random.Range(0, imageCount);
+
                         overlap = false;
 
                         for (int k = 0; k < indexCount; ++k)
@@ -182,7 +187,7 @@ public class SlotMachine : MonoBehaviour
 
     private IEnumerator StartRotateSlotMachine(int slotIndex)
     {
-        int rotateCount = 60 + slotIndex * 60;
+        int rotateCount = 120 + slotIndex * 60;
 
         for (int i = 0; i < rotateCount; ++i)
         {

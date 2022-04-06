@@ -9,13 +9,23 @@ public class Poison : Ability
         weapon.AddAbility(this);
     }
 
-    public override void InvokeAbility(Transform transform,
-                                       Collider other,
-                                       float criticalMultiplier,
-                                       float CriticalRate,
-                                   ref float damage,
-                                   ref int wallBounce,
-                                   ref int monsterBounce)
+    public override bool InvokeAbility(Projectile projectile, Collider other)
     {
+        if (LayerValue.WALL_LAYER == other.gameObject.layer) return false;
+
+        Character hitCharacter = other.GetComponent<Character>();
+        PoisonEffect statusEffet = hitCharacter.GetStatusEffect<PoisonEffect>();
+        if (null == statusEffet)
+        {
+            statusEffet = new PoisonEffect();
+
+            hitCharacter.AddStatusEffect(statusEffet);
+        }
+
+        statusEffet.Init(projectile.Damage,
+                         projectile.CriticalMultiplier,
+                         projectile.CriticalRate);
+
+        return false;
     }
 }

@@ -34,19 +34,20 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        bool isActive = false;
+
         int count = Abilities.Count;
         for (int i = 0; i < count; ++i)
         {
-            Abilities[i].InvokeAbility(transform,
-                                       other,
-                                       CriticalMultiplier,
-                                       CriticalRate,
-                                   ref Damage,
-                                   ref WallBounceCount,
-                                   ref MonsterBounceCount);
+            if (true == Abilities[i].InvokeAbility(this, other))
+            {
+                isActive = true;
+            }
         }
 
-        if (LayerValue.MAP_OBJECT_LAYER != other.gameObject.layer)
+        gameObject.SetActive(isActive);
+
+        if (LayerValue.WALL_LAYER != other.gameObject.layer)
         {
             other.GetComponent<IDamageable>().TakeDamage(Damage,
                                                          CriticalMultiplier,

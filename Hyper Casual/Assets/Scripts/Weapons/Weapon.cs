@@ -25,9 +25,7 @@ public abstract class Weapon
         Init();
     }
 
-    public virtual void Init()
-    {
-    }
+    public abstract void Init();
 
     public void Attack(Transform transform,
                        float damage,
@@ -64,34 +62,34 @@ public abstract class Weapon
         }
     }
 
-    public Vector3 CalculatePosition(Transform transform, Vector3 dir, int maxCount, int curCount)
+    public void AddAbility(Ability ability)
+    {
+        _abilities.Add(ability);
+
+        _abilities.Sort(_addComparer.Compare);
+    }
+
+    private Vector3 CalculateProjectilePosition(Transform transform, Vector3 dir, int maxCount, int curCount)
     {
         Vector3 startPosition = transform.position + dir * (0.1f * (maxCount - 1));
 
         return startPosition + dir * (-0.2f * curCount);
     }
 
-    public void Fire(float damage, float criticalMultiplier, float criticalRate, float angle, Vector3 position)
+    private void Fire(float damage, float criticalMultiplier, float criticalRate, float angle, Vector3 position)
     {
         Projectile projectile = _objectPoolingManager.GetObject();
 
         projectile.Init(damage, criticalMultiplier, criticalRate, _abilities, position, angle);
     }
 
-    public void FireHelper(Transform transform, float damage, float criticalMultiplier, float criticalRate, Vector3 dir, float angle, int maxFireCount)
+    private void FireHelper(Transform transform, float damage, float criticalMultiplier, float criticalRate, Vector3 dir, float angle, int maxFireCount)
     {
         for (int i = 0; i < maxFireCount; ++i)
         {
-            Vector3 position = CalculatePosition(transform, dir, maxFireCount, i);
+            Vector3 position = CalculateProjectilePosition(transform, dir, maxFireCount, i);
 
             Fire(damage, criticalMultiplier, criticalRate, angle, position);
         }
-    }
-
-    public void AddAbility(Ability ability)
-    {
-        _abilities.Add(ability);
-
-        _abilities.Sort(_addComparer.Compare);
     }
 }

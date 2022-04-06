@@ -1999,7 +1999,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed21fa93b8ab0d24f8aa821707c6c794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurHealth: 1
   MoveSpeed: 0
 --- !u!54 &799271570
 Rigidbody:
@@ -2260,7 +2259,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed21fa93b8ab0d24f8aa821707c6c794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurHealth: 1
   MoveSpeed: 0
 --- !u!65 &861782238
 BoxCollider:
@@ -3259,8 +3257,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 82e6dd8482279ec40bca66a69c9635d6, type: 3}
   - {fileID: 21300000, guid: 56deb4d9a4f6bab4ba73a6026fb90878, type: 3}
   - {fileID: 21300000, guid: b261c6f4e2e74704ba6c9f877519a977, type: 3}
-  - {fileID: 21300000, guid: 4854f380c603312428e061eb654a2975, type: 3}
-  - {fileID: 21300000, guid: 65806d448e0225a4aae1a961b11b7ae5, type: 3}
+  - {fileID: 21300000, guid: 2917ae91a8478604fafddc0d1a429189, type: 3}
+  - {fileID: 21300000, guid: 34f9839476ed1aa49b5f2463aa309e5e, type: 3}
+  - {fileID: 21300000, guid: 7e3241cc292e8464595db311f575d5d1, type: 3}
   Result: 
 --- !u!114 &1195247024
 MonoBehaviour:
@@ -3727,7 +3726,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -4027,7 +4026,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed21fa93b8ab0d24f8aa821707c6c794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurHealth: 1
   MoveSpeed: 0
 --- !u!54 &1586000603
 Rigidbody:
@@ -4139,9 +4137,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c44de146b47bb847b7d45a6df0d7c71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurHealth: 1
   MoveSpeed: 10
   _joystick: {fileID: 968124011}
+  _attackSpeed: 1
+  _criticalMultiplier: 2
+  _criticalRate: 20
+  _attackCount: 3
+  _frontAttackCount: 3
+  _rearAttackCount: 3
+  _sideAttackCount: 3
+  _diagonalAttackCount: 3
 --- !u!95 &1643267500
 Animator:
   serializedVersion: 3
@@ -4527,7 +4532,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed21fa93b8ab0d24f8aa821707c6c794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurHealth: 1
   MoveSpeed: 0
 --- !u!54 &1938766280
 Rigidbody:
@@ -4939,7 +4943,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2012266206}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 26.5}
+  m_LocalPosition: {x: 0, y: 0, z: 27}
   m_LocalScale: {x: 5, y: 1, z: 1}
   m_Children:
   - {fileID: 426940279}
@@ -4993,7 +4997,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed21fa93b8ab0d24f8aa821707c6c794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurHealth: 1
   MoveSpeed: 0
 --- !u!54 &2072556818
 Rigidbody:

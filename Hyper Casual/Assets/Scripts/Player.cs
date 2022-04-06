@@ -14,15 +14,15 @@ public class Player : Character
     private Collider _target;
     private Collider[] _colliders = new Collider[16];
     private RaycastHit _hit;
-    private float _attackSpeed = 1f;
-    private float _criticalMultiplier = 2f;
-    private float _criticalRate = 0f;
     private bool _isMove = false;
-    private int _attackCount = 1;
-    private int _frontAttackCount = 1;
-    private int _rearAttackCount = 1;
-    private int _sideAttackCount = 1;
-    private int _diagonalAttackCount = 1;
+    [SerializeField] private float _attackSpeed = 1f;
+    [SerializeField] private float _criticalMultiplier = 2f;
+    [SerializeField] private float _criticalRate = 0f;
+    [SerializeField] private int _attackCount = 1;
+    [SerializeField] private int _frontAttackCount = 1;
+    [SerializeField] private int _rearAttackCount = 1;
+    [SerializeField] private int _sideAttackCount = 1;
+    [SerializeField] private int _diagonalAttackCount = 1;
 
     private const float ATTACK_INTERVAL_TIME = 0.1f;
     private const float SEARCH_DISTANCE = 50f;
@@ -41,20 +41,20 @@ public class Player : Character
 
         slotMachine.AbilityGainEvent -= ApplyAbility;
         slotMachine.AbilityGainEvent += ApplyAbility;
+
+
     }
 
-    private void FixedUpdate()
+    protected override void FixedUpdateAct()
     {
         float x = _joystick.Horizontal;
         float z = _joystick.Vertical;
 
         Vector3 moveVec = new Vector3(x, 0f, z);
 
-        if (0 == moveVec.sqrMagnitude)
-        {
-            _isMove = false;
-        }
-        else
+        _isMove = false;
+
+        if (0 != moveVec.sqrMagnitude)
         {
             _isMove = true;
 
@@ -67,7 +67,7 @@ public class Player : Character
 
             _rigidbody.MoveRotation(moveQuat);
 
-            if (false == Physics.Raycast(_rigidbody.position, moveVec, 1f, LayerValue.MAP_OBJECT_LAYER_MASK))
+            if (false == Physics.Raycast(_rigidbody.position, moveVec, 1f, LayerValue.WALL_LAYER_MASK))
             {
                 _rigidbody.MovePosition(_rigidbody.position + moveVec);
             }
@@ -76,7 +76,7 @@ public class Player : Character
         _animator.SetBool(AnimationID.IS_MOVE, _isMove);
     }
 
-    private void Update()
+    protected override void UpdateAct()
     {
         if (true == _isMove || null == _target)
         {
@@ -223,7 +223,7 @@ public class Player : Character
 
             Physics.Raycast(transform.position, targetDir, out _hit, SEARCH_DISTANCE);
 
-            if (LayerValue.MAP_OBJECT_LAYER == _hit.transform.gameObject.layer) continue;
+            if (LayerValue.WALL_LAYER == _hit.transform.gameObject.layer) continue;
 
             minDistance = distance;
             target = _colliders[i];
