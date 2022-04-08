@@ -2073,7 +2073,7 @@ GameObject:
   - component: {fileID: 6132367417256948983}
   - component: {fileID: 6132367417256948968}
   m_Layer: 13
-  m_Name: Wizard
+  m_Name: Wizard Normal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2087,7 +2087,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6132367417256948979}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.41, y: 0, z: 9.51}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6132367416345597592}
@@ -2251,9 +2251,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e3199954f0d826499e9a6c752ece9a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackDamage: 100
-  _maxHealth: 1000
-  _curHealth: 1000
+  _attackDamage: 250
+  _maxHealth: 1500
+  _curHealth: 1500
   _experience: 200
 --- !u!195 &6132367417256948968
 NavMeshAgent:

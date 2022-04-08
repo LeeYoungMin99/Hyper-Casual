@@ -1184,8 +1184,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackDamage: 150
-  _maxHealth: 2000
-  _curHealth: 2000
+  _maxHealth: 3000
+  _curHealth: 3000
   _experience: 500
   _slashCollider: {fileID: 1356071847318490724}
 --- !u!1 &7429043677521936780

@@ -49,7 +49,7 @@ MonoBehaviour:
   CriticalMultiplier: 2
   CriticalRate: 0
   Damage: 0
-  MoveSpeed: 20
+  MoveSpeed: 30
   WallBounceCount: 0
   MonsterBounceCount: 0
 --- !u!54 &1025462296381621177

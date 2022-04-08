@@ -24,6 +24,8 @@ public class LookAtTarget : State
 
         _rigidbody.MoveRotation(moveQuat);
 
+        Debug.Log("들어오는중");
+
         _transitionParameter.Time += Time.deltaTime;
     }
 }

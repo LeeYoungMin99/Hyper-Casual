@@ -16,6 +16,7 @@ public abstract class Character : MonoBehaviour, IDamageable
 
     private List<StatusEffect> _statusEffects = new List<StatusEffect>();
     private HealthChangeEventArgs _healthChangeEventArgs = new HealthChangeEventArgs();
+    private bool _isDead;
     private bool _canAct;
 
     protected virtual void Awake()
@@ -31,7 +32,10 @@ public abstract class Character : MonoBehaviour, IDamageable
 
     private void FixedUpdate()
     {
-        _canAct = true;
+        if (false == _isDead)
+        {
+            _canAct = true;
+        }
 
         int count = _statusEffects.Count;
         for (int i = 0; i < count; ++i)
@@ -99,6 +103,7 @@ public abstract class Character : MonoBehaviour, IDamageable
 
         _animator.SetBool(AnimationID.IS_DEAD, true);
 
+        _isDead = true;
         _canAct = false;
         _rigidbody.detectCollisions = false;
         _rigidbody.velocity = Utils.ZERO_VECTOR3;

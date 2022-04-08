@@ -198,7 +198,13 @@ public class Player : Character
 
     private void LookatTarget()
     {
-        Vector3 targetDir = _target.transform.position - transform.position;
+        Vector3 correctMyPosition = _rigidbody.position;
+        correctMyPosition.y = 0f;
+
+        Vector3 correctTargetPosition = _target.transform.position;
+        correctTargetPosition.y = 0f;
+
+        Vector3 targetDir = correctTargetPosition - correctMyPosition;
 
         Quaternion moveQuat = Quaternion.LookRotation(targetDir);
 

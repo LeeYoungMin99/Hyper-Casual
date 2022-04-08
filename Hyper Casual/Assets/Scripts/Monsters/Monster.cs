@@ -53,6 +53,7 @@ public class Monster : Character
     {
         base.Death();
 
-        ExperienceManager.Instance.CreateExperience(_experience, transform.position);
+        Vector3 position = new Vector3(transform.position.x, 0f, transform.position.z);
+        ExperienceManager.Instance.CreateExperience(_experience, position);
     }
 }
