@@ -24,10 +24,10 @@ public class SlotMachine : MonoBehaviour
     [HideInInspector] public List<int> Result = new List<int>();
 
     private List<int> _rewardsEarned = new List<int>();
-    private Dictionary<EAbilityTag, Sprite> _abilityTagToSprite = new Dictionary<EAbilityTag, Sprite>(new EnumComparer());
-    private Dictionary<EAbilityTag, string> _nameOfAbilities = new Dictionary<EAbilityTag, string>(new EnumComparer());
-    private Dictionary<EAbilityTag, string> _descriptionOfAbilities = new Dictionary<EAbilityTag, string>(new EnumComparer());
-    private Dictionary<EAbilityTag, Ability> _abilities = new Dictionary<EAbilityTag, Ability>(new EnumComparer());
+    private Dictionary<EAbilityTag, Sprite> _abilityTagToSprite = new Dictionary<EAbilityTag, Sprite>(new AbilityTagEnumComparer());
+    private Dictionary<EAbilityTag, string> _nameOfAbilities = new Dictionary<EAbilityTag, string>(new AbilityTagEnumComparer());
+    private Dictionary<EAbilityTag, string> _descriptionOfAbilities = new Dictionary<EAbilityTag, string>(new AbilityTagEnumComparer());
+    private Dictionary<EAbilityTag, Ability> _abilities = new Dictionary<EAbilityTag, Ability>(new AbilityTagEnumComparer());
 
     private void Awake()
     {

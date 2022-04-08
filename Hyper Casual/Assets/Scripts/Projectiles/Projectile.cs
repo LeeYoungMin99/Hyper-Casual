@@ -47,7 +47,8 @@ public class Projectile : MonoBehaviour
 
         gameObject.SetActive(isActive);
 
-        if (LayerValue.WALL_LAYER != other.gameObject.layer)
+        int layer = other.gameObject.layer;
+        if (LayerValue.WALL_LAYER != layer && LayerValue.MAP_LAYER != layer)
         {
             other.GetComponent<IDamageable>().TakeDamage(Damage,
                                                          CriticalMultiplier,

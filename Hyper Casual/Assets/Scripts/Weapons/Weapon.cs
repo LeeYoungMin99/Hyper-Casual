@@ -16,12 +16,15 @@ public abstract class Weapon
         }
     }
 
+    protected Character _owner;
     protected List<Ability> _abilities = new List<Ability>();
     protected AddComparer _addComparer = new AddComparer();
     protected ObjectPoolingManager<Projectile> _objectPoolingManager;
 
-    public Weapon()
+    public Weapon(Character owner)
     {
+        _owner = owner;
+
         Init();
     }
 
@@ -29,35 +32,47 @@ public abstract class Weapon
 
     public void Attack(Transform transform,
                        float damage,
-                       float criticalMultiplier,
-                       float criticalRate,
-                       int frontFireCount,
-                       int rearFireCount,
-                       int SideFireCount,
-                       int diagonalFireCount)
+                       float criticalMultiplier = 2f,
+                       float criticalRate = 0f,
+                       int frontFireCount = 0,
+                       int rearFireCount = 0,
+                       int sideFireCount = 0,
+                       int frontDiagonalFireCount = 0,
+                       int rearDiagonalFireCount = 0)
     {
-        FireHelper(transform, damage, criticalMultiplier, criticalRate, transform.right, transform.transform.eulerAngles.y, frontFireCount);
+        AttackHelper(transform, damage, criticalMultiplier, criticalRate, transform.right, transform.transform.eulerAngles.y, frontFireCount);
 
         if (0 != rearFireCount)
         {
-            FireHelper(transform, damage, criticalMultiplier, criticalRate, transform.right, transform.transform.eulerAngles.y + 180f, rearFireCount);
+            AttackHelper(transform, damage, criticalMultiplier, criticalRate, transform.right, transform.transform.eulerAngles.y + 180f, rearFireCount);
         }
 
-        if (0 != SideFireCount)
+        if (0 != sideFireCount)
         {
-            FireHelper(transform, damage, criticalMultiplier, criticalRate, transform.forward, transform.transform.eulerAngles.y - 90f, SideFireCount);
+            AttackHelper(transform, damage, criticalMultiplier, criticalRate, transform.forward, transform.transform.eulerAngles.y - 90f, sideFireCount);
 
-            FireHelper(transform, damage, criticalMultiplier, criticalRate, transform.forward, transform.transform.eulerAngles.y + 90f, SideFireCount);
+            AttackHelper(transform, damage, criticalMultiplier, criticalRate, transform.forward, transform.transform.eulerAngles.y + 90f, sideFireCount);
         }
 
-        if (0 != diagonalFireCount)
+        if (0 != frontDiagonalFireCount)
         {
-            float angle = 90f / (diagonalFireCount + 1);
+            float angle = 90f / (frontDiagonalFireCount + 1);
 
-            for (int i = diagonalFireCount; i > 0; --i)
+            for (int i = frontDiagonalFireCount; i > 0; --i)
             {
-                Fire(damage, criticalMultiplier, criticalRate, transform.eulerAngles.y + (-angle * i), transform.position);
-                Fire(damage, criticalMultiplier, criticalRate, transform.eulerAngles.y + (angle * i), transform.position);
+                InitProjectile(damage, criticalMultiplier, criticalRate, transform.eulerAngles.y + (-angle * i), transform.position);
+                InitProjectile(damage, criticalMultiplier, criticalRate, transform.eulerAngles.y + (angle * i), transform.position);
+            }
+        }
+
+        if (0 != rearDiagonalFireCount)
+        {
+            float angle = 90f / (frontDiagonalFireCount + 1) + 180f;
+
+            for (int i = frontDiagonalFireCount; i > 0; --i)
+            {
+                InitProjectile(damage, criticalMultiplier, criticalRate, transform.eulerAngles.y + (-angle * i), transform.position);
+                InitProjectile(damage, criticalMultiplier, criticalRate, transform.eulerAngles.y + (angle * i), transform.position);
             }
         }
     }
@@ -76,20 +91,20 @@ public abstract class Weapon
         return startPosition + dir * (-0.2f * curCount);
     }
 
-    private void Fire(float damage, float criticalMultiplier, float criticalRate, float angle, Vector3 position)
+    private void InitProjectile(float damage, float criticalMultiplier, float criticalRate, float angle, Vector3 position)
     {
         Projectile projectile = _objectPoolingManager.GetObject();
 
         projectile.Init(damage, criticalMultiplier, criticalRate, _abilities, position, angle);
     }
 
-    private void FireHelper(Transform transform, float damage, float criticalMultiplier, float criticalRate, Vector3 dir, float angle, int maxFireCount)
+    private void AttackHelper(Transform transform, float damage, float criticalMultiplier, float criticalRate, Vector3 dir, float angle, int maxFireCount)
     {
         for (int i = 0; i < maxFireCount; ++i)
         {
             Vector3 position = CalculateProjectilePosition(transform, dir, maxFireCount, i);
 
-            Fire(damage, criticalMultiplier, criticalRate, angle, position);
+            InitProjectile(damage, criticalMultiplier, criticalRate, angle, position);
         }
     }
 }

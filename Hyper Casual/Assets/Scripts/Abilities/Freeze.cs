@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Freeze : Ability
 {
+    private const float DURATION = 2f;
+
     public override void ApplyAbility(Player character, Weapon weapon)
     {
         weapon.AddAbility(this);
@@ -11,7 +13,7 @@ public class Freeze : Ability
 
     public override bool InvokeAbility(Projectile projectile, Collider other)
     {
-        if (LayerValue.WALL_LAYER == other.gameObject.layer) return false;
+        if (LayerValue.WALL_LAYER == other.gameObject.layer || LayerValue.MAP_LAYER == other.gameObject.layer) return false;
 
         Character hitCharacter = other.GetComponent<Character>();
         FreezeEffect statusEffet = hitCharacter.GetStatusEffect<FreezeEffect>();
@@ -22,7 +24,7 @@ public class Freeze : Ability
             hitCharacter.AddStatusEffect(statusEffet);
         }
 
-        statusEffet.Init(2f);
+        statusEffet.Init(DURATION);
 
         return false;
     }

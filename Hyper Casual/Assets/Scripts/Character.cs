@@ -5,28 +5,23 @@ using UnityEngine;
 
 public abstract class Character : MonoBehaviour, IDamageable
 {
-    public float MoveSpeed;
+    [SerializeField] protected float _attackDamage = 100f;
+    [SerializeField] protected float _maxHealth = 1000;
+    [SerializeField] protected float _curHealth = 1000;
 
     public event EventHandler<HealthChangeEventArgs> HealthChangeEvent;
 
     protected Rigidbody _rigidbody;
     protected Animator _animator;
-    protected float _attackDamage = 0.001f;
-    protected float _maxHealth = 100;
-    protected float _curHealth = 100;
-
-    private bool _canAct;
 
     private List<StatusEffect> _statusEffects = new List<StatusEffect>();
-
     private HealthChangeEventArgs _healthChangeEventArgs = new HealthChangeEventArgs();
+    private bool _canAct;
 
     protected virtual void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
-
-        AddStatusEffect(new FreezeEffect());
     }
 
     private void OnEnable()
@@ -47,7 +42,7 @@ public abstract class Character : MonoBehaviour, IDamageable
             }
         }
 
-        //_animator.SetBool(AnimationID.CAN_ACT, _canAct);
+        _animator.SetBool(AnimationID.CAN_ACT, _canAct);
         if (false == _canAct) return;
 
         FixedUpdateAct();
@@ -58,6 +53,13 @@ public abstract class Character : MonoBehaviour, IDamageable
         if (false == _canAct) return;
 
         UpdateAct();
+    }
+
+    private void LateUpdate()
+    {
+        if (false == _canAct) return;
+
+        LateUpdateAct();
     }
 
     public void TakeDamage(float damage,
@@ -86,11 +88,20 @@ public abstract class Character : MonoBehaviour, IDamageable
     }
 
     protected virtual void FixedUpdateAct() { }
+
     protected virtual void UpdateAct() { }
+
+    protected virtual void LateUpdateAct() { }
 
     protected virtual void Death()
     {
+        Destroy(gameObject, 2f);
+
+        _animator.SetBool(AnimationID.IS_DEAD, true);
+
+        _canAct = false;
         _rigidbody.detectCollisions = false;
+        _rigidbody.velocity = Utils.ZERO_VECTOR3;
 
         StopAllCoroutines();
 

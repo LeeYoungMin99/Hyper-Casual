@@ -26,7 +26,7 @@ public class HealthBar : MonoBehaviour
 
     public void SetHealthBar(object sender, HealthChangeEventArgs args)
     {
-        if (0 >= args.CurHealth) Destroy(this, 1f);
+        if (0 >= args.CurHealth) Destroy(gameObject, 2f);
 
         _slider.value = args.CurHealth / args.MaxHealth;
         _text.text = $"{args.CurHealth}";

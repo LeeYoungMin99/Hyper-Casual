@@ -5,6 +5,6 @@ using UnityEngine;
 public interface IDamageable
 {
     public void TakeDamage(float damage,
-                           float criticalMultiplier,
-                           float criticalRate);
+                           float criticalMultiplier = 2f,
+                           float criticalRate = 0f);
 }
