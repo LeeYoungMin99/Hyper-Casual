@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class EnumComparer : IEqualityComparer<EAbilityTag>
+public class AbilityTagEnumComparer : IEqualityComparer<EAbilityTag>
 {
     public bool Equals(EAbilityTag x, EAbilityTag y)
     {

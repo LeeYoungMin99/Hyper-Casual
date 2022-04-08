@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Ricochet : Ability
 {
-    private Collider[] _colliders = new Collider[8];
-
     private const int MAX_BOUNCE_COUNT = 3;
 
     public Ricochet()
@@ -20,7 +18,7 @@ public class Ricochet : Ability
 
     public override bool InvokeAbility(Projectile projectile, Collider other)
     {
-        if (LayerValue.WALL_LAYER == other.gameObject.layer) return false;
+        if (LayerValue.WALL_LAYER == other.gameObject.layer || LayerValue.MAP_LAYER == other.gameObject.layer) return false;
 
         if (MAX_BOUNCE_COUNT <= projectile.MonsterBounceCount) return false;
 
@@ -28,7 +26,7 @@ public class Ricochet : Ability
 
         projectile.Damage *= 0.7f;
 
-        int count = Physics.OverlapSphereNonAlloc(other.transform.position, 10f, _colliders, LayerValue.ALL_ENEMY_LAYER_MASK);
+        int count = Physics.OverlapSphereNonAlloc(other.transform.position, 10f, Utils.Colliders, LayerValue.ALL_ENEMY_LAYER_MASK);
 
         if (count == 0) return false;
 
@@ -38,9 +36,9 @@ public class Ricochet : Ability
 
         for (int i = 0; i < count; ++i)
         {
-            if (other == _colliders[i]) continue;
+            if (other == Utils.Colliders[i]) continue;
 
-            Vector3 targetDir = (_colliders[i].transform.position - projectileTransform.position).normalized;
+            Vector3 targetDir = (Utils.Colliders[i].transform.position - projectileTransform.position).normalized;
 
             float angle = Utils.CalculateAngle(targetDir, projectileTransform.forward);
 

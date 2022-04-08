@@ -20,7 +20,7 @@ public class BouncyWall : Ability
 
     public override bool InvokeAbility(Projectile projectile, Collider other)
     {
-        if (LayerValue.WALL_LAYER != other.gameObject.layer) return false;
+        if (LayerValue.WALL_LAYER != other.gameObject.layer && LayerValue.MAP_LAYER != other.gameObject.layer) return false;
 
         if (MAX_BOUNCE_COUNT <= projectile.WallBounceCount) return false;
 
@@ -36,7 +36,7 @@ public class BouncyWall : Ability
         Vector3 reflect = Vector3.Reflect(projectile.transform.forward, _hit.normal).normalized;
 
         float angle = Utils.CalculateAngle(reflect, projectile.transform.forward);
-
+        
         projectile.transform.rotation = Quaternion.Euler(0f, projectile.transform.eulerAngles.y + angle, 0f);
 
         return true;

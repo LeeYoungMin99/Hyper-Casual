@@ -12,13 +12,13 @@ GameObject:
   - component: {fileID: 7835184204737463405}
   - component: {fileID: 1025462296381621177}
   - component: {fileID: 1119137300447184707}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Knife
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &207099706187296242
 Transform:
   m_ObjectHideFlags: 0
@@ -46,11 +46,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ca1a4c7ad51e3b47960a2907920aca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Rigidbody: {fileID: 0}
   CriticalMultiplier: 2
   CriticalRate: 0
   Damage: 0
-  MoveSpeed: 20
+  MoveSpeed: 30
   WallBounceCount: 0
   MonsterBounceCount: 0
 --- !u!54 &1025462296381621177
@@ -93,7 +92,7 @@ GameObject:
   - component: {fileID: 4387817606162794760}
   - component: {fileID: 4512902345002037785}
   - component: {fileID: 1993933770113959490}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Prop_04_L_TwinDagger
   m_TagString: Untagged
   m_Icon: {fileID: 0}

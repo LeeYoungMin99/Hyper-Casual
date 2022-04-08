@@ -8,7 +8,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Map
   - Water
   - UI
   - Wall
@@ -24,7 +24,7 @@ TagManager:
   - Enemy Anywhere Walkable
   - Experience
   - Experience Gainer
-  - 
+  - Only Wall
   - 
   - 
   - 

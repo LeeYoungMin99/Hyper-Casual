@@ -9,27 +9,27 @@ public class Projectile : MonoBehaviour
     public float CriticalMultiplier = 2f;
     public float CriticalRate = 0f;
     public float Damage = 0f;
-    public float MoveSpeed = 100f;
+    public float MoveSpeed = 20f;
 
     public int WallBounceCount = 0;
     public int MonsterBounceCount = 0;
 
-    private Rigidbody _rigidbody;
+    protected Rigidbody _rigidbody;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
     }
 
-    private void OnDisable()
+    protected virtual void FixedUpdate()
+    {
+        _rigidbody.MovePosition(transform.position + (transform.forward * (MoveSpeed * Time.deltaTime)));
+    }
+
+    protected virtual void OnDisable()
     {
         WallBounceCount = 0;
         MonsterBounceCount = 0;
-    }
-
-    private void FixedUpdate()
-    {
-        _rigidbody.MovePosition(transform.position + (transform.forward * (MoveSpeed * Time.deltaTime)));
     }
 
     private void OnTriggerEnter(Collider other)
@@ -47,7 +47,8 @@ public class Projectile : MonoBehaviour
 
         gameObject.SetActive(isActive);
 
-        if (LayerValue.WALL_LAYER != other.gameObject.layer)
+        int layer = other.gameObject.layer;
+        if (LayerValue.WALL_LAYER != layer && LayerValue.MAP_LAYER != layer)
         {
             other.GetComponent<IDamageable>().TakeDamage(Damage,
                                                          CriticalMultiplier,
@@ -62,7 +63,6 @@ public class Projectile : MonoBehaviour
         CriticalRate = criticalRate;
         Abilities = abilities;
         transform.SetPositionAndRotation(position, Quaternion.Euler(0f, angle, 0f));
-
         gameObject.SetActive(true);
     }
 }

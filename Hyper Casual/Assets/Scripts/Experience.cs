@@ -7,7 +7,7 @@ public class Experience : MonoBehaviour
 {
     [SerializeField] private Rigidbody _rigidbody;
 
-    public float ExperienceAmount = 0f;
+    [HideInInspector] public float ExperienceAmount = 0f;
 
     private Transform _gainer = null;
 

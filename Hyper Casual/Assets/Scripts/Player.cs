@@ -3,29 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
 public class Player : Character
 {
     [SerializeField] private Joystick _joystick;
-
-
-    private Weapon _weapon;
-    private Collider _target;
-    private Collider[] _colliders = new Collider[16];
-    private RaycastHit _hit;
-    private bool _isMove = false;
-    [SerializeField] private float _attackSpeed = 1f;
+    [SerializeField] private float _moveSpeed = 300f;
     [SerializeField] private float _criticalMultiplier = 2f;
     [SerializeField] private float _criticalRate = 0f;
     [SerializeField] private int _attackCount = 1;
     [SerializeField] private int _frontAttackCount = 1;
     [SerializeField] private int _rearAttackCount = 1;
     [SerializeField] private int _sideAttackCount = 1;
-    [SerializeField] private int _diagonalAttackCount = 1;
+    [SerializeField] private int _frontDiagonalAttackCount = 1;
+    [SerializeField] private int _rearDiagonalAttackCount = 0;
+
+    private Weapon _weapon;
+    private Collider _target;
+    private Collider _collider;
+    private RaycastHit _hit;
+    private bool _isMove = false;
+    private float _attackSpeed = 1f;
 
     private const float ATTACK_INTERVAL_TIME = 0.1f;
     private const float SEARCH_DISTANCE = 50f;
+    private const string ENABLE_COLLIDER = "EnableCollider";
 
     protected override void Awake()
     {
@@ -34,15 +34,14 @@ public class Player : Character
         HealthBarManager.Instance.CreateHealthBar(this, EHealthBarType.Player);
         InvokeChangeHealthEvent();
 
-        _weapon = new Knife();
+        _weapon = new Knife(this);
+        _collider = GetComponent<Collider>();
 
         SlotMachine slotMachine = GameObject.Find("Slot Machine Canvas").transform.
                                              Find("Slot Machine").GetComponent<SlotMachine>();
 
         slotMachine.AbilityGainEvent -= ApplyAbility;
         slotMachine.AbilityGainEvent += ApplyAbility;
-
-
     }
 
     protected override void FixedUpdateAct()
@@ -60,17 +59,13 @@ public class Player : Character
 
             StopAllCoroutines();
 
-            moveVec *= MoveSpeed * Time.deltaTime;
+            moveVec *= _moveSpeed * Time.deltaTime;
 
             Quaternion dirQuat = Quaternion.LookRotation(moveVec);
             Quaternion moveQuat = Quaternion.Slerp(_rigidbody.rotation, dirQuat, 0.3f);
 
             _rigidbody.MoveRotation(moveQuat);
-
-            if (false == Physics.Raycast(_rigidbody.position, moveVec, 1f, LayerValue.WALL_LAYER_MASK))
-            {
-                _rigidbody.MovePosition(_rigidbody.position + moveVec);
-            }
+            _rigidbody.velocity = moveVec;
         }
 
         _animator.SetBool(AnimationID.IS_MOVE, _isMove);
@@ -100,6 +95,14 @@ public class Player : Character
     private void LateUpdate()
     {
         _rigidbody.velocity = Vector3.zero;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (LayerValue.WALL_LAYER == collision.gameObject.layer) return;
+
+        _collider.enabled = false;
+        Invoke(ENABLE_COLLIDER, 1f);
     }
 
     public void AttackDamageUp(float multiplier)
@@ -140,7 +143,7 @@ public class Player : Character
 
     public void DiagonalArrows()
     {
-        _diagonalAttackCount += 1;
+        _frontDiagonalAttackCount += 1;
     }
 
     public void SideArrows()
@@ -172,7 +175,8 @@ public class Player : Character
                       _frontAttackCount,
                       _rearAttackCount,
                       _sideAttackCount,
-                      _diagonalAttackCount);
+                      _frontDiagonalAttackCount,
+                      _rearDiagonalAttackCount);
 
         if (2 > count) return;
 
@@ -194,7 +198,13 @@ public class Player : Character
 
     private void LookatTarget()
     {
-        Vector3 targetDir = _target.transform.position - transform.position;
+        Vector3 correctMyPosition = _rigidbody.position;
+        correctMyPosition.y = 0f;
+
+        Vector3 correctTargetPosition = _target.transform.position;
+        correctTargetPosition.y = 0f;
+
+        Vector3 targetDir = correctTargetPosition - correctMyPosition;
 
         Quaternion moveQuat = Quaternion.LookRotation(targetDir);
 
@@ -203,30 +213,30 @@ public class Player : Character
 
     private Collider FindNearTarget()
     {
-        int count = Physics.OverlapSphereNonAlloc(Vector3.zero, SEARCH_DISTANCE, _colliders, LayerValue.ALL_ENEMY_LAYER_MASK);
+        int count = Physics.OverlapSphereNonAlloc(Vector3.zero, SEARCH_DISTANCE, Utils.Colliders, LayerValue.ALL_ENEMY_LAYER_MASK);
 
         float minDistance = float.MaxValue;
 
         if (0 == count) return null;
 
-        Collider target = _colliders[0];
+        Collider target = Utils.Colliders[0];
 
         if (1 == count) return target;
 
         for (int i = 0; i < count; ++i)
         {
-            float distance = Vector3.Distance(_colliders[i].transform.position, transform.position);
+            float distance = Vector3.Distance(Utils.Colliders[i].transform.position, transform.position);
 
             if (minDistance <= distance) continue;
 
-            Vector3 targetDir = _colliders[i].transform.position - transform.position;
+            Vector3 targetDir = Utils.Colliders[i].transform.position - transform.position;
 
             Physics.Raycast(transform.position, targetDir, out _hit, SEARCH_DISTANCE);
 
             if (LayerValue.WALL_LAYER == _hit.transform.gameObject.layer) continue;
 
             minDistance = distance;
-            target = _colliders[i];
+            target = Utils.Colliders[i];
         }
 
         return target;
@@ -235,5 +245,10 @@ public class Player : Character
     private void ApplyAbility(object sender, AbilityEventArgs args)
     {
         args.Ability.ApplyAbility(this, _weapon);
+    }
+
+    private void EnableCollider()
+    {
+        _collider.enabled = true;
     }
 }

@@ -16,7 +16,7 @@ public class Piercing : Ability
 
     public override bool InvokeAbility(Projectile projectile, Collider other)
     {
-        if (LayerValue.WALL_LAYER == other.gameObject.layer) return false;
+        if (LayerValue.WALL_LAYER == other.gameObject.layer || LayerValue.MAP_LAYER == other.gameObject.layer) return false;
 
         int bounceCount = projectile.MonsterBounceCount;
         if (0 < bounceCount && bounceCount < 3) return false;
