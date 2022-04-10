@@ -183,6 +183,12 @@ public class SlotMachine : MonoBehaviour
         _slotMachineCanvas.SetActive(false);
 
         Time.timeScale = 1f;
+
+        int count = _slots.Count;
+        for (int i = 0; i < count; ++i)
+        {
+            _text[i].text = null;
+        }
     }
 
     private IEnumerator StartRotateSlotMachine(int slotIndex)

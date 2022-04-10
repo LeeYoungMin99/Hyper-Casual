@@ -28,7 +28,7 @@ public class ExperienceManager : MonoBehaviour
         {
             Experience experience = _objectPoolingManager.GetObject();
 
-            float experienceAmount = (60f > exp) ? exp : UnityEngine.Random.Range(40f, 60f);
+            float experienceAmount = (6f > exp) ? exp : UnityEngine.Random.Range(4f, 6f);
             exp -= experienceAmount;
 
             experience.SetExperience(ExperienceGainer.transform, experienceAmount, position);

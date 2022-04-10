@@ -108,6 +108,8 @@ public abstract class Character : MonoBehaviour, IDamageable
 
     protected virtual void Death()
     {
+        if (true == _isDead) return;
+
         Destroy(gameObject, 2f);
 
         _animator.SetBool(AnimationID.IS_DEAD, true);

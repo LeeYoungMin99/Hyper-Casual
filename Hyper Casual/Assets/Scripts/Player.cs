@@ -99,7 +99,8 @@ public class Player : Character
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (LayerValue.WALL_LAYER == collision.gameObject.layer) return;
+        int layer = collision.gameObject.layer;
+        if (LayerValue.WALL_LAYER == layer || LayerValue.MAP_LAYER == layer) return;
 
         _collider.enabled = false;
         Invoke(ENABLE_COLLIDER, 1f);
@@ -198,6 +199,8 @@ public class Player : Character
 
     private void LookatTarget()
     {
+        if (null == _target) return;
+
         Vector3 correctMyPosition = _rigidbody.position;
         correctMyPosition.y = 0f;
 

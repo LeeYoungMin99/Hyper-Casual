@@ -21,8 +21,13 @@ public class Monster : Character
 
     private void OnCollisionEnter(Collision collision)
     {
-        int count = LayerValue.PLAYER_LAYERS.Length;
         int layer = collision.gameObject.layer;
+        if (LayerValue.MAP_LAYER == layer)
+        {
+            _rigidbody.velocity = Utils.ZERO_VECTOR3;
+        }
+
+        int count = LayerValue.PLAYER_LAYERS.Length;
         for (int i = 0; i < count; ++i)
         {
             if (layer == LayerValue.PLAYER_LAYERS[i])
@@ -59,6 +64,7 @@ public class Monster : Character
         Vector3 position = new Vector3(transform.position.x, 0f, transform.position.z);
         ExperienceManager.Instance.CreateExperience(_experience, position);
 
-        DeathEvent.Invoke(this, EventArgs.Empty);
+        DeathEvent?.Invoke(this, EventArgs.Empty);
+        DeathEvent = null;
     }
 }

@@ -34,8 +34,6 @@ public abstract class State
         {
             if (true == _transitions[i].Check(_transitionParameter))
             {
-                Debug.Log(_transitions[i]);
-                Debug.Log(_transitions[i].ConnectedState);
                 _stateMachine.ChangeState(_transitions[i].ConnectedState);
 
                 return;

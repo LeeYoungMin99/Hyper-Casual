@@ -58,7 +58,6 @@ public class Chase : State
 
         _rigidbody.MoveRotation(moveQuat);
         _rigidbody.velocity = targetDir.normalized * (_moveSpeed * Time.deltaTime);
-        Debug.Log(_rigidbody.velocity);
 
         _transitionParameter.Distance = Vector3.Distance(_rigidbody.position, _target.position);
         _transitionParameter.Time += Time.deltaTime;
