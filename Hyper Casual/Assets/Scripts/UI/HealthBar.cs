@@ -29,7 +29,7 @@ public class HealthBar : MonoBehaviour
         if (0 >= args.CurHealth) Destroy(gameObject, 2f);
 
         _slider.value = args.CurHealth / args.MaxHealth;
-        _text.text = $"{args.CurHealth}";
+        _text.text = $"{(int)(args.CurHealth)}";
 
         StartCoroutine(SetHealthBarEffect());
     }

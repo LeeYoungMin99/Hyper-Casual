@@ -222,5 +222,8 @@ public class SlotMachine : MonoBehaviour
     private void EnableSlotMachine(object sender, EventArgs args)
     {
         _slotMachineCanvas.SetActive(true);
+
+        _abilityEventArgs.Ability = _abilities[EAbilityTag.MaxHealthUp];
+        AbilityGainEvent?.Invoke(this, _abilityEventArgs);
     }
 }

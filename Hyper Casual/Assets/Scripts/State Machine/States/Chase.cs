@@ -52,12 +52,12 @@ public class Chase : State
             SetDestination();
         }
 
-        Vector3 targetDir = _navMeshAgent.steeringTarget - _rigidbody.position;
+        Vector3 targetDir = (_navMeshAgent.steeringTarget - _rigidbody.position).normalized;
         Quaternion dirQuat = Quaternion.LookRotation(targetDir);
         Quaternion moveQuat = Quaternion.Slerp(_rigidbody.rotation, dirQuat, _rotateSpeed * Time.deltaTime);
-
+        
         _rigidbody.MoveRotation(moveQuat);
-        _rigidbody.velocity = targetDir.normalized * (_moveSpeed * Time.deltaTime);
+        _rigidbody.velocity = targetDir * (_moveSpeed * Time.deltaTime);
 
         _transitionParameter.Distance = Vector3.Distance(_rigidbody.position, _target.position);
         _transitionParameter.Time += Time.deltaTime;
@@ -67,8 +67,7 @@ public class Chase : State
     {
         Debug.Log("셋데스티네이션");
         _navMeshAgent.SetDestination(_target.position);
-        _navMeshAgent.isStopped = true;
-        _navMeshAgent.updateRotation = false;
+        _navMeshAgent.updatePosition = false;
 
         _elapsedTime = 0f;
     }
