@@ -213,7 +213,7 @@ public class Player : Character
 
     private Collider FindNearTarget()
     {
-        int count = Physics.OverlapSphereNonAlloc(Vector3.zero, SEARCH_DISTANCE, Utils.Colliders, LayerValue.ALL_ENEMY_LAYER_MASK);
+        int count = Physics.OverlapSphereNonAlloc(transform.position, SEARCH_DISTANCE, Utils.Colliders, LayerValue.ALL_ENEMY_LAYER_MASK);
 
         float minDistance = float.MaxValue;
 

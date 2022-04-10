@@ -35,7 +35,7 @@ public class ExperienceManager : MonoBehaviour
         }
     }
 
-    public void ExperienceGoToGainer()
+    public void ExperienceGoToGainer(object sender, EventArgs args)
     {
         ExperienceGoToGainerEvent?.Invoke(this, EventArgs.Empty);
     }
