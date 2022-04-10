@@ -26,11 +26,11 @@ public class ExperienceGainer : MonoBehaviour
         GainExperienceEvent?.Invoke(this, _experienceEvent);
     }
 
-    private void EnableCollider(object sender, EventArgs args)
+    public void EnableCollider(object sender, EventArgs args)
     {
         _collider.enabled = true;
 
-        Invoke(DISABLE_COLLIDER, 3f);
+        Invoke(DISABLE_COLLIDER, 5f);
     }
 
     private void DisableCollider()

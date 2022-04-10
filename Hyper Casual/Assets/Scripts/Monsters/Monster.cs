@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,8 @@ public class Monster : Character
     [SerializeField] protected float _experience = 200f;
 
     protected StateMachine _stateMachine = new StateMachine();
+
+    public event EventHandler<EventArgs> DeathEvent;
 
     protected override void Awake()
     {
@@ -55,5 +58,7 @@ public class Monster : Character
 
         Vector3 position = new Vector3(transform.position.x, 0f, transform.position.z);
         ExperienceManager.Instance.CreateExperience(_experience, position);
+
+        DeathEvent.Invoke(this, EventArgs.Empty);
     }
 }
