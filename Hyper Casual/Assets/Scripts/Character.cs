@@ -70,7 +70,16 @@ public abstract class Character : MonoBehaviour, IDamageable
                            float criticalMultiplier,
                            float criticalRate)
     {
-        TakeDamageHelper(damage, criticalMultiplier, criticalRate);
+        bool isCritical = false;
+
+        if (true == CalculateCritical(criticalRate))
+        {
+            damage *= criticalMultiplier;
+            isCritical = true;
+            CameraShaker.Instance.ShakeCamera(0.5f, 0.5f);
+        }
+
+        TakeDamageHelper(damage, isCritical);
     }
 
     public void AddStatusEffect(StatusEffect statusEffect)
@@ -120,17 +129,8 @@ public abstract class Character : MonoBehaviour, IDamageable
         HealthChangeEvent?.Invoke(this, _healthChangeEventArgs);
     }
 
-    private void TakeDamageHelper(float damage, float criticalMultiplier, float criticalRate)
+    protected virtual void TakeDamageHelper(float damage, bool isCritical)
     {
-        bool isCritical = false;
-
-        if (true == CalculateCritical(criticalRate))
-        {
-            damage *= criticalMultiplier;
-            isCritical = true;
-            CameraShaker.Instance.ShakeCamera(0.5f, 0.5f);
-        }
-
         DamageTextManager.Instance.MarkDamageText(this, damage, isCritical);
         _curHealth -= damage;
 
