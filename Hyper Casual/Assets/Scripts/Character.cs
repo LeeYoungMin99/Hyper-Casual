@@ -32,10 +32,9 @@ public abstract class Character : MonoBehaviour, IDamageable
 
     private void FixedUpdate()
     {
-        if (false == _isDead)
-        {
-            _canAct = true;
-        }
+        if (true == _isDead) return;
+
+        _canAct = true;
 
         int count = _statusEffects.Count;
         for (int i = 0; i < count; ++i)
@@ -108,6 +107,8 @@ public abstract class Character : MonoBehaviour, IDamageable
 
     protected virtual void Death()
     {
+        if (true == _isDead) return;
+
         Destroy(gameObject, 2f);
 
         _animator.SetBool(AnimationID.IS_DEAD, true);
@@ -136,7 +137,7 @@ public abstract class Character : MonoBehaviour, IDamageable
 
         InvokeChangeHealthEvent();
 
-        if (0f < _curHealth) return;
+        if (0.01f < _curHealth) return;
 
         Death();
     }

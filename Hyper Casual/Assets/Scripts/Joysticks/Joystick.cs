@@ -14,6 +14,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     private enum EAxisOptions { Both, Horizontal, Vertical }
 
     private Canvas _canvas;
+    private RectTransform _canvasRectTransform;
     private RectTransform _rectTransform;
     private Vector2 input;
 
@@ -26,6 +27,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     {
         _rectTransform = GetComponent<RectTransform>();
         _canvas = GetComponentInParent<Canvas>();
+        _canvasRectTransform = _canvas.GetComponent<RectTransform>();
         input = Utils.ZERO_VECTOR2;
 
         Vector2 center = new Vector2(0.5f, 0.5f);
@@ -38,7 +40,12 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        _background.anchoredPosition = ScreenPointToAnchoredPosition(eventData.position);
+        float x = _canvasRectTransform.rect.width / Screen.width;
+        float y = _canvasRectTransform.rect.height / Screen.height;
+
+        Vector2 newPosition = new Vector2(eventData.position.x * x, eventData.position.y * y);
+
+        _background.anchoredPosition = ScreenPointToAnchoredPosition(newPosition);
     }
 
     public void OnDrag(PointerEventData eventData)

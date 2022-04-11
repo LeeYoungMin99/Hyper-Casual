@@ -183,6 +183,12 @@ public class SlotMachine : MonoBehaviour
         _slotMachineCanvas.SetActive(false);
 
         Time.timeScale = 1f;
+
+        int count = _slots.Count;
+        for (int i = 0; i < count; ++i)
+        {
+            _text[i].text = null;
+        }
     }
 
     private IEnumerator StartRotateSlotMachine(int slotIndex)
@@ -216,5 +222,8 @@ public class SlotMachine : MonoBehaviour
     private void EnableSlotMachine(object sender, EventArgs args)
     {
         _slotMachineCanvas.SetActive(true);
+
+        _abilityEventArgs.Ability = _abilities[EAbilityTag.MaxHealthUp];
+        AbilityGainEvent?.Invoke(this, _abilityEventArgs);
     }
 }

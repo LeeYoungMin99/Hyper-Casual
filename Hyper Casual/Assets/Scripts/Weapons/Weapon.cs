@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EWeaponType { Knife, Staff, HomingStaff }
+
 public abstract class Weapon
 {
     public class AddComparer : IComparer<Ability>

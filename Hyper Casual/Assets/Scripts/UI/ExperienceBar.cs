@@ -13,7 +13,7 @@ public class ExperienceBar : MonoBehaviour
     public event EventHandler<EventArgs> LevelUpEvent;
 
     private Coroutine _setValueCoroutine;
-    private float _maxExperience = 50f;
+    private float _maxExperience = 200f;
     private float _curExperience = 0f;
     private float _experienceGained = 0f;
     private int _level = 1;
@@ -39,7 +39,7 @@ public class ExperienceBar : MonoBehaviour
         {
             float curExperienceToGain;
 
-            curExperienceToGain = (1f > _experienceGained) ? _experienceGained : Mathf.Lerp(0, _experienceGained, Time.deltaTime * 10f);
+            curExperienceToGain = (1f > _experienceGained) ? _experienceGained : Mathf.Lerp(0, _experienceGained, Time.deltaTime * 5f);
 
             _experienceGained -= curExperienceToGain;
             _curExperience += curExperienceToGain;
