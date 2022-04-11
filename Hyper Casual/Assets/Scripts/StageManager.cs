@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
-    [SerializeField] private GameObject ClearMesage;
+    [SerializeField] private GameObject ClearMessage;
     private int _stage = 0;
 
     private void OnTriggerEnter(Collider other)
@@ -31,7 +31,7 @@ public class StageManager : MonoBehaviour
 
         if (9 == _stage)
         {
-            ClearMesage.SetActive(true);
+            ClearMessage.SetActive(true);
         }
     }
 }

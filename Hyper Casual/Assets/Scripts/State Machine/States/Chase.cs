@@ -65,7 +65,6 @@ public class Chase : State
 
     private void SetDestination()
     {
-        Debug.Log("셋데스티네이션");
         _navMeshAgent.SetDestination(_target.position);
         _navMeshAgent.updatePosition = false;
 
