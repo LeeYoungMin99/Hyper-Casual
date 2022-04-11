@@ -18,6 +18,7 @@ public class SlotMachine : MonoBehaviour
     [SerializeField] private List<SlotImage> _slotImages;
     [SerializeField] private List<Text> _text;
     [SerializeField] private List<Sprite> _sprites;
+    [SerializeField] private ExperienceBar _experienceBar;
 
     public event EventHandler<AbilityEventArgs> AbilityGainEvent;
     public AbilityEventArgs _abilityEventArgs = new AbilityEventArgs();
@@ -91,11 +92,8 @@ public class SlotMachine : MonoBehaviour
         _descriptionOfAbilities[EAbilityTag.Freeze] = "공격이 적을 얼립니다.";
         _descriptionOfAbilities[EAbilityTag.Poison] = "공격이 적을 중독시킵니다.";
 
-        ExperienceBar experienceBar = GameObject.Find("Canvas").transform.
-                                      Find("Experience Bar").GetComponent<ExperienceBar>();
-
-        experienceBar.LevelUpEvent -= EnableSlotMachine;
-        experienceBar.LevelUpEvent += EnableSlotMachine;
+        _experienceBar.LevelUpEvent -= EnableSlotMachine;
+        _experienceBar.LevelUpEvent += EnableSlotMachine;
     }
 
     private void OnEnable()

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EWeaponType { Knife, Staff, HomingStaff }
+public enum EWeaponType { Knife, Spinner, HomingStaff }
 
 public abstract class Weapon
 {

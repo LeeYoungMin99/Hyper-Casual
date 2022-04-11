@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Player : Character
 {
-    [SerializeField] private Joystick _joystick;
+    [Header("Player Setting")]
     [SerializeField] private float _moveSpeed = 300f;
     [SerializeField] private float _criticalMultiplier = 2f;
     [SerializeField] private float _criticalRate = 0f;
@@ -15,6 +15,10 @@ public class Player : Character
     [SerializeField] private int _sideAttackCount = 1;
     [SerializeField] private int _frontDiagonalAttackCount = 1;
     [SerializeField] private int _rearDiagonalAttackCount = 0;
+
+    [SerializeField] private Joystick _joystick;
+    [SerializeField] private GameObject[] _weapons;
+    [SerializeField] private GameObject DeathMessage;
 
     private Weapon _weapon;
     private Collider _target;
@@ -34,7 +38,6 @@ public class Player : Character
         HealthBarManager.Instance.CreateHealthBar(this, EHealthBarType.Player);
         InvokeChangeHealthEvent();
 
-        _weapon = new Knife(this);
         _collider = GetComponent<Collider>();
 
         SlotMachine slotMachine = GameObject.Find("Slot Machine Canvas").transform.
@@ -42,6 +45,24 @@ public class Player : Character
 
         slotMachine.AbilityGainEvent -= ApplyAbility;
         slotMachine.AbilityGainEvent += ApplyAbility;
+
+        TitleManager titleManager = GameObject.Find("Title Manager").GetComponent<TitleManager>();
+
+        switch (titleManager.EquipmentWeapon)
+        {
+            case EWeaponType.Knife:
+                _weapon = new Knife(this);
+                break;
+            case EWeaponType.Spinner:
+                _weapon = new Spinner(this);
+                break;
+            case EWeaponType.HomingStaff:
+                _weapon = new HomingStaff(this);
+                break;
+        }
+
+        _weapons[(int)titleManager.EquipmentWeapon].SetActive(true);
+        Destroy(titleManager.gameObject);
     }
 
     protected override void FixedUpdateAct()
@@ -160,6 +181,9 @@ public class Player : Character
     protected override void Death()
     {
         base.Death();
+
+        Time.timeScale = 0f;
+        DeathMessage.SetActive(true);
     }
 
     private void Attack()
