@@ -6,6 +6,7 @@ public class Projectile : MonoBehaviour
 {
     public List<Ability> Abilities;
 
+    public Transform Owner;
     public float CriticalMultiplier = 2f;
     public float CriticalRate = 0f;
     public float Damage = 0f;
@@ -13,6 +14,7 @@ public class Projectile : MonoBehaviour
 
     public int WallBounceCount = 0;
     public int MonsterBounceCount = 0;
+    public bool IsReturning = false;
 
     protected Rigidbody _rigidbody;
 
@@ -23,6 +25,21 @@ public class Projectile : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
+        if (true == IsReturning)
+        {
+            Vector3 targetDir = (Owner.position - transform.position).normalized;
+
+            float angle = Utils.CalculateAngle(targetDir, transform.forward);
+
+            transform.rotation = Quaternion.Euler(0f, transform.eulerAngles.y + angle, 0f);
+
+            if (0.1f >= Vector3.Distance(Owner.position, transform.position))
+            {
+                gameObject.SetActive(false);
+                IsReturning = false;
+            }
+        }
+
         _rigidbody.MovePosition(transform.position + (transform.forward * (MoveSpeed * Time.deltaTime)));
     }
 
@@ -42,6 +59,7 @@ public class Projectile : MonoBehaviour
             if (true == Abilities[i].InvokeAbility(this, other))
             {
                 isActive = true;
+                break;
             }
         }
 
@@ -56,8 +74,9 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    public void Init(float damage, float criticalMultiplier, float criticalRate, List<Ability> abilities, Vector3 position, float angle)
+    public void Init(Transform owner, float damage, float criticalMultiplier, float criticalRate, List<Ability> abilities, Vector3 position, float angle)
     {
+        Owner = owner;
         Damage = damage;
         CriticalMultiplier = criticalMultiplier;
         CriticalRate = criticalRate;

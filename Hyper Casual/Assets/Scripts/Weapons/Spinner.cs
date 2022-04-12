@@ -22,5 +22,7 @@ public class Spinner : Weapon
         }
 
         _objectPoolingManager = new ObjectPoolingManager<Projectile>(prefab);
+
+        AddAbility(new Boomerang());
     }
 }

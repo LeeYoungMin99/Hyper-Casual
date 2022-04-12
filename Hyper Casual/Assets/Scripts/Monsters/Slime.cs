@@ -10,7 +10,7 @@ public class Slime : Monster
     {
         base.Awake();
 
-        RunAndBounceWall runAndBounceWall = new RunAndBounceWall(_stateMachine, this, 500f);
+        RunAndBounce runAndBounceWall = new RunAndBounce(_stateMachine, this, 500f);
         new SplitBody(_stateMachine, this);
 
         _stateMachine.ChangeState(runAndBounceWall);

@@ -47,7 +47,7 @@ public class Player : Character
         slotMachine.AbilityGainEvent += ApplyAbility;
 
         TitleManager titleManager = GameObject.Find("Title Manager").GetComponent<TitleManager>();
-
+        
         switch (titleManager.EquipmentWeapon)
         {
             case EWeaponType.Knife:
@@ -60,9 +60,9 @@ public class Player : Character
                 _weapon = new HomingStaff(this);
                 break;
         }
-
+        
         _weapons[(int)titleManager.EquipmentWeapon].SetActive(true);
-        Destroy(titleManager.gameObject);
+       Destroy(titleManager.gameObject);
     }
 
     protected override void FixedUpdateAct()

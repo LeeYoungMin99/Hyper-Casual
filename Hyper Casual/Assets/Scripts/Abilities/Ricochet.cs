@@ -8,7 +8,7 @@ public class Ricochet : Ability
 
     public Ricochet()
     {
-        Order = 2;
+        Order = 1;
     }
 
     public override void ApplyAbility(Player character, Weapon weapon)

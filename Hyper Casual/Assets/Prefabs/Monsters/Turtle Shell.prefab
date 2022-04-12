@@ -865,8 +865,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackDamage: 100
-  _maxHealth: 1000
-  _curHealth: 1000
+  _maxHealth: 100
+  _curHealth: 100
   _experience: 200
 --- !u!1 &1822049695589022
 GameObject:
