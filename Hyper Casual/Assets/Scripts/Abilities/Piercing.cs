@@ -6,7 +6,7 @@ public class Piercing : Ability
 {
     public Piercing()
     {
-        Order = 1;
+        Order = 4;
     }
 
     public override void ApplyAbility(Player character, Weapon weapon)

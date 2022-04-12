@@ -97,7 +97,7 @@ public abstract class Weapon
     {
         Projectile projectile = _objectPoolingManager.GetObject();
 
-        projectile.Init(damage, criticalMultiplier, criticalRate, _abilities, position, angle);
+        projectile.Init(_owner.transform, damage, criticalMultiplier, criticalRate, _abilities, position, angle);
     }
 
     private void AttackHelper(Transform transform, float damage, float criticalMultiplier, float criticalRate, Vector3 dir, float angle, int maxFireCount)
