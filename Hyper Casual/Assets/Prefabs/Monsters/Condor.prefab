@@ -580,7 +580,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8538729341484801998
 Transform:
   m_ObjectHideFlags: 0
@@ -659,4 +659,6 @@ MonoBehaviour:
   _attackDamage: 100
   _maxHealth: 1000
   _curHealth: 1000
+  _renderer: {fileID: 5823657110617085588}
+  _defaultMaterial: {fileID: 2100000, guid: 4cc8593971a195b479f0715ae622a404, type: 2}
   _experience: 200

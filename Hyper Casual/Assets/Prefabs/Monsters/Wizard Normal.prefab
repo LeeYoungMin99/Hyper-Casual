@@ -248,7 +248,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6132367416345597592}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &6132367415776518949
 SkinnedMeshRenderer:
@@ -1099,8 +1099,8 @@ Transform:
   m_LocalPosition: {x: 0, y: -0.85, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 6132367417161474396}
   - {fileID: 6132367415776518946}
+  - {fileID: 6132367417161474396}
   m_Father: {fileID: 6132367417256948980}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1901,7 +1901,7 @@ Transform:
   m_Children:
   - {fileID: 6132367417363478474}
   m_Father: {fileID: 6132367416345597592}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6132367417166786492
 GameObject:
@@ -2254,6 +2254,7 @@ MonoBehaviour:
   _attackDamage: 250
   _maxHealth: 1500
   _curHealth: 1500
+  _renderer: {fileID: 6132367415776518949}
   _experience: 200
 --- !u!195 &6132367417256948968
 NavMeshAgent:

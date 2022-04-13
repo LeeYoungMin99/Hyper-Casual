@@ -33,7 +33,7 @@ public class Projectile : MonoBehaviour
 
             transform.rotation = Quaternion.Euler(0f, transform.eulerAngles.y + angle, 0f);
 
-            if (0.1f >= Vector3.Distance(Owner.position, transform.position))
+            if (0.5f >= Vector3.Distance(Owner.position, transform.position))
             {
                 gameObject.SetActive(false);
                 IsReturning = false;

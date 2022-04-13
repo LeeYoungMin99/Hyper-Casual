@@ -19,7 +19,7 @@ public class Boomerang : Ability
         int layer = other.gameObject.layer;
         if (LayerValue.WALL_LAYER != layer && LayerValue.MAP_LAYER != layer) return true;
 
-        if (0 < projectile.WallBounceCount || projectile.WallBounceCount > 3) return true;
+        if (0 < projectile.WallBounceCount && projectile.WallBounceCount > 3) return true;
 
         projectile.IsReturning = true;
 

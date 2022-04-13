@@ -31,8 +31,6 @@ public class BouncyWall : Ability
         _ray.origin = projectile.transform.position + (projectile.transform.forward * -5f);
         _ray.direction = projectile.transform.forward;
 
-        Debug.DrawRay(_ray.origin, _ray.direction);
-
         other.Raycast(_ray, out _hit, 2000f);
 
         Vector3 reflect = Vector3.Reflect(projectile.transform.forward, _hit.normal).normalized;

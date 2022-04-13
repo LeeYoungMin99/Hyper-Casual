@@ -9,7 +9,7 @@ public class StageManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerValue.WALL_LAYER || other.gameObject.layer == LayerValue.MAP_LAYER) return;
+        if (LayerValue.PLAYER_LAYERS[0] != other.gameObject.layer) return;
 
         ++_stage;
 
