@@ -22,9 +22,11 @@ public class Poison : Ability
             hitCharacter.AddStatusEffect(statusEffet);
         }
 
-        statusEffet.Init(projectile.Damage,
-                         projectile.CriticalMultiplier,
-                         projectile.CriticalRate);
+        statusEffet.Activate(hitCharacter,
+                             0f,
+                             projectile.Damage,
+                             projectile.CriticalMultiplier,
+                             projectile.CriticalRate);
 
         return false;
     }

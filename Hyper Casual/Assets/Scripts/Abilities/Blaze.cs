@@ -24,10 +24,11 @@ public class Blaze : Ability
             hitCharacter.AddStatusEffect(statusEffet);
         }
 
-        statusEffet.Init(DURATION,
-                         projectile.Damage,
-                         projectile.CriticalMultiplier,
-                         projectile.CriticalRate);
+        statusEffet.Activate(hitCharacter,
+                             DURATION,
+                             projectile.Damage,
+                             projectile.CriticalMultiplier,
+                             projectile.CriticalRate);
 
         return false;
     }

@@ -4,28 +4,16 @@ using UnityEngine;
 
 public class FreezeEffect : StatusEffect
 {
-    private bool _enable;
     private float _duration;
+    private float _prevActivateTime;
 
-    public void Init(float duration)
+    public override void Activate(Character character, float duration, float damage, float criticalMultiplier, float criticalRate)
     {
-        if (0 < _duration) return;
+        if (Time.time < _prevActivateTime + _duration) return;
 
         _duration = duration;
-        _enable = true;
-    }
+        _prevActivateTime = Time.time;
 
-    public override bool Update(Character character)
-    {
-        if (0 >= _duration || false == _enable) return true;
-
-        _duration -= Time.deltaTime;
-
-        return false;
-    }
-
-    public void Unfreeze()
-    {
-        _enable = false;
+        character.ActivateStatusEffect(EStatusEffectType.Freeze, _duration, 0, 0, 0);
     }
 }

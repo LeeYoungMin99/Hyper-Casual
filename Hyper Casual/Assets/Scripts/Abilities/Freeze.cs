@@ -24,7 +24,7 @@ public class Freeze : Ability
             hitCharacter.AddStatusEffect(statusEffet);
         }
 
-        statusEffet.Init(DURATION);
+        statusEffet.Activate(hitCharacter, DURATION, 0f, 0f, 0f);
 
         return false;
     }
