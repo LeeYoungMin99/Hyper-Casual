@@ -25,7 +25,7 @@ public class Projectile : MonoBehaviour
     private const float HOMING_TIME = 0.2f;
     private const int MAX_BOUNCE_COUNT = 3;
 
-    protected virtual void Awake()
+    private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
 
@@ -44,7 +44,7 @@ public class Projectile : MonoBehaviour
         _onFixedUpdateAbilityFunction[1] = FixedUpdateBoomerang;
     }
 
-    protected virtual void FixedUpdate()
+    private void FixedUpdate()
     {
         int count = _abilities.Count;
         for (int i = 0; i < count; ++i)
@@ -55,7 +55,7 @@ public class Projectile : MonoBehaviour
         _rigidbody.MovePosition(transform.position + (transform.forward * (_moveSpeed * Time.deltaTime)));
     }
 
-    protected virtual void OnDisable()
+    private void OnDisable()
     {
         _wallBounceCount = 0;
         _monsterBounceCount = 0;
