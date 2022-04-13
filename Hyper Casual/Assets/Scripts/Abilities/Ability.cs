@@ -1,9 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum EAbilityTag
 {
+    Homing,
+    Boomerang,
+    Piercing,
+    Ricochet,
+    BouncyWall,
+    Blaze,
+    Freeze,
+    Poison,
+    MultiShot,
     AttackDamageUp,
     AttackSppedUp,
     CriticalUp,
@@ -11,21 +18,23 @@ public enum EAbilityTag
     FrontArrow,
     DiagonalArrows,
     SideArrows,
-    RearArrow,
-    MultiShot,
-    Piercing,
-    Ricochet,
-    BouncyWall,
-    Blaze,
-    Freeze,
-    Poison
+    RearArrow
 }
 
 public abstract class Ability
 {
     public int Order = 0;
+    protected EAbilityTag _tag;
 
     public virtual void ApplyAbility(Player character, Weapon weapon) { }
 
-    public virtual bool InvokeAbility(Projectile projectile, Collider other) { return false; }
+    public virtual void InvokeAbility(Projectile projectile, Collider other)
+    {
+        projectile.InvokeAbility(_tag, other);
+    }
+
+    public virtual void FixedUpdateAbility(Projectile projectile)
+    {
+        projectile.FixedUpdateAbility(_tag);
+    }
 }

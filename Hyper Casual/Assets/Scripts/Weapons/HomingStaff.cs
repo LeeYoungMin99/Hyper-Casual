@@ -12,15 +12,10 @@ public class HomingStaff : Weapon
 
         prefab = GameObject.Instantiate(prefab, _owner.transform);
 
-        if (true == (_owner.GetType() == typeof(Player)))
-        {
-            prefab.layer = LayerValue.FRIENDLY_PROJECTILE;
-        }
-        else
-        {
-            prefab.layer = LayerValue.ENEMY_PROJECTILE;
-        }
+        prefab.layer = _layer;
 
         _objectPoolingManager = new ObjectPoolingManager<Projectile>(prefab);
+
+        AddAbility(new Homing());
     }
 }

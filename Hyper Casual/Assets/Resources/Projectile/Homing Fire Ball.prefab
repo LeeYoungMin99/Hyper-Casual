@@ -43,16 +43,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1064937647983085222}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab99055ae7ac23b449d10c33358e54fb, type: 3}
+  m_Script: {fileID: 11500000, guid: 9ca1a4c7ad51e3b47960a2907920aca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Owner: {fileID: 0}
   CriticalMultiplier: 2
   CriticalRate: 0
   Damage: 0
   MoveSpeed: 5
   WallBounceCount: 0
   MonsterBounceCount: 0
-  _rotateSpeed: 10
 --- !u!54 &8096812189292457572
 Rigidbody:
   m_ObjectHideFlags: 0
