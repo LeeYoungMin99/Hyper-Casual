@@ -36,10 +36,16 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         _handle.anchorMax = center;
         _handle.pivot = center;
         _handle.anchoredPosition = Utils.ZERO_VECTOR2;
+
+        _handle.gameObject.SetActive(false);
+        _background.gameObject.SetActive(false);
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        _handle.gameObject.SetActive(true);
+        _background.gameObject.SetActive(true);
+
         float x = _canvasRectTransform.rect.width / Screen.width;
         float y = _canvasRectTransform.rect.height / Screen.height;
 
@@ -67,6 +73,9 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         input = Utils.ZERO_VECTOR2;
         _handle.anchoredPosition = Utils.ZERO_VECTOR2;
         _background.anchoredPosition = Utils.ZERO_VECTOR2;
+
+        _handle.gameObject.SetActive(false);
+        _background.gameObject.SetActive(false);
     }
 
     private float SnapFloat(float value, EAxisOptions snapAxis)

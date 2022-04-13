@@ -27,7 +27,6 @@ public class SlotMachine : MonoBehaviour
     private List<int> _rewardsEarned = new List<int>();
     private Dictionary<EAbilityTag, Sprite> _abilityTagToSprite = new Dictionary<EAbilityTag, Sprite>(new AbilityTagEnumComparer());
     private Dictionary<EAbilityTag, string> _nameOfAbilities = new Dictionary<EAbilityTag, string>(new AbilityTagEnumComparer());
-    private Dictionary<EAbilityTag, string> _descriptionOfAbilities = new Dictionary<EAbilityTag, string>(new AbilityTagEnumComparer());
     private Dictionary<EAbilityTag, Ability> _abilities = new Dictionary<EAbilityTag, Ability>(new AbilityTagEnumComparer());
 
     private void Awake()
@@ -41,7 +40,7 @@ public class SlotMachine : MonoBehaviour
         count = _sprites.Count;
         for (int i = 0; i < count; ++i)
         {
-            _abilityTagToSprite[(EAbilityTag)i] = _sprites[i];
+            _abilityTagToSprite[(EAbilityTag)i + 2] = _sprites[i];
         }
 
         _abilities[EAbilityTag.AttackDamageUp] = new AttackDamageUp();
@@ -76,22 +75,6 @@ public class SlotMachine : MonoBehaviour
         _nameOfAbilities[EAbilityTag.Freeze] = "얼음";
         _nameOfAbilities[EAbilityTag.Poison] = "독";
 
-        _descriptionOfAbilities[EAbilityTag.AttackDamageUp] = "공격력이 20% 증가합니다.";
-        _descriptionOfAbilities[EAbilityTag.AttackSppedUp] = "공격속도가 25% 증가합니다.";
-        _descriptionOfAbilities[EAbilityTag.CriticalUp] = "크리티컬 확률이 20% 증가합니다.\n크리티컬 데미지 40% 증가합니다.";
-        _descriptionOfAbilities[EAbilityTag.MaxHealthUp] = "최대 체력이 20% 증가합니다.";
-        _descriptionOfAbilities[EAbilityTag.FrontArrow] = "전방 투사체가 1개 증가합니다.";
-        _descriptionOfAbilities[EAbilityTag.DiagonalArrows] = "전방 양쪽 대각선으로 투사체가 1개씩 증가합니다.";
-        _descriptionOfAbilities[EAbilityTag.SideArrows] = "양쪽으로 투사체가 1개씩 증가합니다.";
-        _descriptionOfAbilities[EAbilityTag.RearArrow] = "후방 투사체가 1개 증가합니다.";
-        _descriptionOfAbilities[EAbilityTag.MultiShot] = "한번 더 공격합니다.";
-        _descriptionOfAbilities[EAbilityTag.Piercing] = "공격이 몬스터를 관통합니다.";
-        _descriptionOfAbilities[EAbilityTag.Ricochet] = "명중한 투사체가 주변 몬스터를 향합니다.";
-        _descriptionOfAbilities[EAbilityTag.BouncyWall] = "화살이 벽에 맞으면 튕겨납니다.";
-        _descriptionOfAbilities[EAbilityTag.Blaze] = "공격이 적을 불태웁니다.";
-        _descriptionOfAbilities[EAbilityTag.Freeze] = "공격이 적을 얼립니다.";
-        _descriptionOfAbilities[EAbilityTag.Poison] = "공격이 적을 중독시킵니다.";
-
         _experienceBar.LevelUpEvent -= EnableSlotMachine;
         _experienceBar.LevelUpEvent += EnableSlotMachine;
     }
@@ -110,22 +93,22 @@ public class SlotMachine : MonoBehaviour
         int imageCount = _abilityTagToSprite.Count;
         for (int i = 0; i < _slotImages.Count; ++i)
         {
-            int randomIndex = UnityEngine.Random.Range(0, imageCount);
+            int randomIndex;
 
             count = _slotImages[i].SlotImages.Count - 1;
             for (int j = 0; j < count; ++j)
             {
-                randomIndex = UnityEngine.Random.Range(0, imageCount);
+                randomIndex = UnityEngine.Random.Range(2, imageCount + 2);
 
                 if (0 == j)
                 {
-                    bool overlap = false;
+                    bool overlap;
                     int indexCount = Result.Count;
                     int rewardsEarnedCount = _rewardsEarned.Count;
 
                     do
                     {
-                        randomIndex = UnityEngine.Random.Range(0, imageCount);
+                        randomIndex = UnityEngine.Random.Range(2, imageCount + 2);
 
                         overlap = false;
 
@@ -171,7 +154,7 @@ public class SlotMachine : MonoBehaviour
     {
         _abilityEventArgs.Ability = _abilities[(EAbilityTag)Result[index]];
 
-        if (Result[index] >= (int)EAbilityTag.MultiShot)
+        if (Result[index] <= (int)EAbilityTag.MultiShot)
         {
             _rewardsEarned.Add(Result[index]);
         }

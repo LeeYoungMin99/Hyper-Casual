@@ -22,10 +22,13 @@ public abstract class Weapon
     protected List<Ability> _abilities = new List<Ability>();
     protected AddComparer _addComparer = new AddComparer();
     protected ObjectPoolingManager<Projectile> _objectPoolingManager;
+    protected int _layer;
 
     public Weapon(Character owner)
     {
         _owner = owner;
+
+        _layer = (_owner.GetType() == typeof(Player)) ? LayerValue.FRIENDLY_PROJECTILE : LayerValue.ENEMY_PROJECTILE;
 
         Init();
     }

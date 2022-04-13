@@ -16,6 +16,7 @@ public class Player : Character
     [SerializeField] private int _frontDiagonalAttackCount = 1;
     [SerializeField] private int _rearDiagonalAttackCount = 0;
 
+    [SerializeField] private AudioSource _audioSource;
     [SerializeField] private Joystick _joystick;
     [SerializeField] private GameObject[] _weapons;
     [SerializeField] private GameObject DeathMessage;
@@ -47,7 +48,7 @@ public class Player : Character
         slotMachine.AbilityGainEvent += ApplyAbility;
 
         TitleManager titleManager = GameObject.Find("Title Manager").GetComponent<TitleManager>();
-        
+
         switch (titleManager.EquipmentWeapon)
         {
             case EWeaponType.Knife:
@@ -60,9 +61,9 @@ public class Player : Character
                 _weapon = new HomingStaff(this);
                 break;
         }
-        
+
         _weapons[(int)titleManager.EquipmentWeapon].SetActive(true);
-       Destroy(titleManager.gameObject);
+        Destroy(titleManager.gameObject);
     }
 
     protected override void FixedUpdateAct()
@@ -193,6 +194,8 @@ public class Player : Character
 
     private void AttackHelper(int count)
     {
+        _audioSource.Play();
+
         _weapon.Attack(transform,
                       _attackDamage,
                       _criticalMultiplier,
