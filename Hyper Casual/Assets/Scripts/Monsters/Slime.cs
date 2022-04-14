@@ -8,6 +8,8 @@ public class Slime : Monster
 
     protected override void Awake()
     {
+        _healthBarType = EHealthBarType.Monster;
+
         base.Awake();
 
         RunAndBounce runAndBounceWall = new RunAndBounce(_stateMachine, this, 500f);

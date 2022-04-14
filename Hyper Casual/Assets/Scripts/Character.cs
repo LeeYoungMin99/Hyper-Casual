@@ -16,13 +16,12 @@ public abstract class Character : MonoBehaviour, IDamageable
 
     protected Rigidbody _rigidbody;
     protected Animator _animator;
+    protected bool _isDead = false;
 
     private List<StatusEffect> _statusEffects = new List<StatusEffect>();
     private HealthChangeEventArgs _healthChangeEventArgs = new HealthChangeEventArgs();
-
     private delegate void OnActivateStatusEffect(float duration, float damage, float criticalMultiplier, float cirticalRate);
     private OnActivateStatusEffect[] _statusEffectFunction = new OnActivateStatusEffect[3];
-    private bool _isDead = false;
     private bool _canAct = true;
 
     protected virtual void Awake()

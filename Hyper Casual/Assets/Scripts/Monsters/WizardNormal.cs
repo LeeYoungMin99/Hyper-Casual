@@ -6,6 +6,8 @@ public class WizardNormal : Monster
 {
     protected override void Awake()
     {
+        _healthBarType = EHealthBarType.Monster;
+
         base.Awake();
 
         Aiming aiming = new Aiming(_stateMachine, this);

@@ -6,11 +6,9 @@ public class KingSlime : Monster
 {
     protected override void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody>();
-        _animator = GetComponent<Animator>();
+        _healthBarType = EHealthBarType.Boss;
 
-        HealthBarManager.Instance.CreateHealthBar(this, EHealthBarType.Boss);
-        InvokeChangeHealthEvent();
+        base.Awake();
 
         None none = new None(_stateMachine, this);
 

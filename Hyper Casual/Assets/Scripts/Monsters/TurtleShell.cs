@@ -6,6 +6,8 @@ public class TurtleShell : Monster
 {
     protected override void Awake()
     {
+        _healthBarType = EHealthBarType.Monster;
+
         base.Awake();
 
         LookAtRandom lookAtRandom = new LookAtRandom(_stateMachine, this, 10f);
