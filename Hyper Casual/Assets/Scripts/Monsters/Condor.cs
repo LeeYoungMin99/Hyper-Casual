@@ -6,6 +6,8 @@ public class Condor : Monster
 {
     protected override void Awake()
     {
+        _healthBarType = EHealthBarType.Monster;
+
         base.Awake();
 
         LookAtTarget lookAtTarget = new LookAtTarget(_stateMachine, this, 10f);

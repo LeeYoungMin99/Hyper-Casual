@@ -22,6 +22,7 @@ public class Projectile : MonoBehaviour
     private bool _isReturning = false;
     private int _targetLayerMask;
     private float _homingElapsedTime;
+
     private const float HOMING_TIME = 0.2f;
     private const int MAX_BOUNCE_COUNT = 3;
 
@@ -150,7 +151,7 @@ public class Projectile : MonoBehaviour
         int layer = other.gameObject.layer;
         if (LayerValue.WALL_LAYER != layer && LayerValue.MAP_LAYER != layer) return;
 
-        if (0 < _wallBounceCount && _wallBounceCount > 3) return;
+        if (0 < _wallBounceCount && _wallBounceCount < 3) return;
 
         _isReturning = true;
     }

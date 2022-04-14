@@ -6,11 +6,9 @@ public class WizardBoss : Monster
 {
     protected override void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody>();
-        _animator = GetComponent<Animator>();
+        _healthBarType = EHealthBarType.Boss;
 
-        HealthBarManager.Instance.CreateHealthBar(this, EHealthBarType.Boss);
-        InvokeChangeHealthEvent();
+        base.Awake();
 
         LookAtRandom lookAtRandom = new LookAtRandom(_stateMachine, this, 10f);
         Dash dash = new Dash(_stateMachine, this, 200f);

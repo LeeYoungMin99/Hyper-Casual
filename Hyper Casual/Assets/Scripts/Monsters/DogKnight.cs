@@ -10,6 +10,8 @@ public class DogKnight : Monster
 
     protected override void Awake()
     {
+        _healthBarType = EHealthBarType.Monster;
+
         base.Awake();
 
         Chase chase = new Chase(_stateMachine, this, 200f, 10f);

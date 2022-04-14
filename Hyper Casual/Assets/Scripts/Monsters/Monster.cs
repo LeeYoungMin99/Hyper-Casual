@@ -8,6 +8,7 @@ public class Monster : Character
     [SerializeField] protected float _experience = 200f;
 
     protected StateMachine _stateMachine = new StateMachine();
+    protected EHealthBarType _healthBarType;
 
     public event EventHandler<EventArgs> DeathEvent;
 
@@ -15,7 +16,7 @@ public class Monster : Character
     {
         base.Awake();
 
-        HealthBarManager.Instance.CreateHealthBar(this, EHealthBarType.Monster);
+        HealthBarManager.Instance.CreateHealthBar(this, _healthBarType);
         InvokeChangeHealthEvent();
     }
 
@@ -59,6 +60,8 @@ public class Monster : Character
 
     protected override void Death()
     {
+        if (true == _isDead) return;
+
         base.Death();
 
         Vector3 position = new Vector3(transform.position.x, 0f, transform.position.z);
