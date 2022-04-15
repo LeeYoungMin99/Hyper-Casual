@@ -15,4 +15,6 @@ public class Ricochet : Ability
     {
         weapon.AddAbility(this);
     }
+
+    public override void FixedUpdateAbility(Projectile projectile) { }
 }

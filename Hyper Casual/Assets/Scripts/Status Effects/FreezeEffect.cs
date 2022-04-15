@@ -7,6 +7,11 @@ public class FreezeEffect : StatusEffect
     private float _duration;
     private float _prevActivateTime;
 
+    public FreezeEffect()
+    {
+        _tag = EStatusEffectTag.Freeze;
+    }
+
     public override void Activate(Character character, float duration, float damage, float criticalMultiplier, float criticalRate)
     {
         if (Time.time < _prevActivateTime + _duration) return;
@@ -14,6 +19,6 @@ public class FreezeEffect : StatusEffect
         _duration = duration;
         _prevActivateTime = Time.time;
 
-        character.ActivateStatusEffect(EStatusEffectType.Freeze, _duration, 0, 0, 0);
+        character.ActivateStatusEffect(_tag, _duration, 0, 0, 0);
     }
 }
