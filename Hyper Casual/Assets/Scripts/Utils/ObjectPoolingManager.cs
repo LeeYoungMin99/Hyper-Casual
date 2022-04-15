@@ -3,27 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPoolingManager<T>
+public class ObjectPoolingManager<T> where T : MonoBehaviour
 {
     private GameObject _prefab;
     private Transform _parent;
 
     private List<T> _objectPool = new List<T>(32);
     private Queue<int> _disabledObjectIndexes = new Queue<int>(32);
-    private int _count = 0;
+    private int _index = 0;
 
     public ObjectPoolingManager(GameObject prefab, Transform parent = null)
     {
         _prefab = prefab;
 
-        if (null == parent)
-        {
-            _parent = new GameObject(_prefab.name).transform;
-        }
-        else
-        {
-            _parent = parent;
-        }
+        _parent = (null == parent) ? new GameObject(_prefab.name).transform : parent;
     }
 
     public void CreateObjectPool(int count)
@@ -32,11 +25,6 @@ public class ObjectPoolingManager<T>
         {
             CreateObject();
         }
-    }
-
-    public List<T> GetObjectPool()
-    {
-        return _objectPool;
     }
 
     public T GetObject()
@@ -59,13 +47,13 @@ public class ObjectPoolingManager<T>
 
         _objectPool.Add(objComponent);
 
-        pooling.Init(_count);
+        pooling.Init(_index);
         pooling.OnDisableEvent -= PushIndex;
         pooling.OnDisableEvent += PushIndex;
 
-        _disabledObjectIndexes.Enqueue(_count);
+        _disabledObjectIndexes.Enqueue(_index);
 
-        ++_count;
+        ++_index;
     }
 
     private void PushIndex(object sender, ObjectPoolingEventArgs args)

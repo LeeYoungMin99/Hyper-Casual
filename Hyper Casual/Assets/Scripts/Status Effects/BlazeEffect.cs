@@ -6,12 +6,25 @@ public class BlazeEffect : StatusEffect
 {
     private float _damage;
 
-    public override void Activate(Character character, float duration, float damage, float criticalMultiplier, float criticalRate)
+    public BlazeEffect()
+    {
+        _tag = EStatusEffectTag.Blaze;
+    }
+
+    public override void Activate(Character character, 
+                                  float duration, 
+                                  float damage, 
+                                  float criticalMultiplier, 
+                                  float criticalRate)
     {
         if (_damage > damage) return;
 
         _damage = damage;
 
-        character.ActivateStatusEffect(EStatusEffectType.Blaze, duration, _damage, criticalMultiplier, criticalRate);
+        character.ActivateStatusEffect(_tag, 
+                                       duration, 
+                                       _damage, 
+                                       criticalMultiplier, 
+                                       criticalRate);
     }
 }

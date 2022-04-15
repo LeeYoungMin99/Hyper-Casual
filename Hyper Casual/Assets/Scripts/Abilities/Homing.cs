@@ -13,4 +13,6 @@ public class Homing : Ability
     {
         weapon.AddAbility(this);
     }
+
+    public override void InvokeAbility(Projectile projectile, Collider other) { }
 }

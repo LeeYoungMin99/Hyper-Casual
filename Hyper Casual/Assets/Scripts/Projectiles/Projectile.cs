@@ -21,9 +21,11 @@ public class Projectile : MonoBehaviour
     private bool _isActive = false;
     private bool _isReturning = false;
     private int _targetLayerMask;
-    private float _homingElapsedTime;
+    private float _homingElapsedTime = 0f;
 
     private const float HOMING_TIME = 0.2f;
+    private const float RETURN_DISTANCE = 0.5f;
+    private const float HOMING_SEARCH_DISTANCE = 3f;
     private const int MAX_BOUNCE_COUNT = 3;
 
     private void Awake()
@@ -32,7 +34,6 @@ public class Projectile : MonoBehaviour
 
         _targetLayerMask = (LayerValue.FRIENDLY_PROJECTILE == gameObject.layer) ? LayerValue.ALL_ENEMY_LAYER_MASK : LayerValue.ALL_PLAYER_LAYER_MASK;
 
-        _onInvokeAbilityFunction[(int)EAbilityTag.Homing] = null;
         _onInvokeAbilityFunction[(int)EAbilityTag.Boomerang] = Boomerang;
         _onInvokeAbilityFunction[(int)EAbilityTag.Piercing] = Piercing;
         _onInvokeAbilityFunction[(int)EAbilityTag.Ricochet] = Ricochet;
@@ -41,8 +42,16 @@ public class Projectile : MonoBehaviour
         _onInvokeAbilityFunction[(int)EAbilityTag.Freeze] = Freeze;
         _onInvokeAbilityFunction[(int)EAbilityTag.Poison] = Poison;
 
-        _onFixedUpdateAbilityFunction[0] = FixedUpdateHoming;
-        _onFixedUpdateAbilityFunction[1] = FixedUpdateBoomerang;
+        _onFixedUpdateAbilityFunction[(int)EAbilityTag.Homing] = FixedUpdateHoming;
+        _onFixedUpdateAbilityFunction[(int)EAbilityTag.Boomerang] = FixedUpdateBoomerang;
+    }
+
+    private void OnDisable()
+    {
+        _wallBounceCount = 0;
+        _monsterBounceCount = 0;
+        _isReturning = false;
+        _homingElapsedTime = 0f;
     }
 
     private void FixedUpdate()
@@ -54,12 +63,6 @@ public class Projectile : MonoBehaviour
         }
 
         _rigidbody.MovePosition(transform.position + (transform.forward * (_moveSpeed * Time.deltaTime)));
-    }
-
-    private void OnDisable()
-    {
-        _wallBounceCount = 0;
-        _monsterBounceCount = 0;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -75,12 +78,11 @@ public class Projectile : MonoBehaviour
         gameObject.SetActive(_isActive);
 
         int layer = other.gameObject.layer;
-        if (LayerValue.WALL_LAYER != layer && LayerValue.MAP_LAYER != layer)
-        {
-            other.GetComponent<IDamageable>().TakeDamage(_damage,
-                                                         _criticalMultiplier,
-                                                         _criticalRate);
-        }
+        if (LayerValue.WALL_LAYER == layer || LayerValue.MAP_LAYER == layer) return;
+
+        other.GetComponent<IDamageable>().TakeDamage(_damage,
+                                                     _criticalMultiplier,
+                                                     _criticalRate);
     }
 
     public void Init(Transform owner, float damage, float criticalMultiplier, float criticalRate, List<Ability> abilities, Vector3 position, float angle)
@@ -96,51 +98,48 @@ public class Projectile : MonoBehaviour
 
     public void InvokeAbility(EAbilityTag tag, Collider other)
     {
-        _onInvokeAbilityFunction[(int)tag]?.Invoke(other);
+        _onInvokeAbilityFunction[(int)tag].Invoke(other);
     }
 
     public void FixedUpdateAbility(EAbilityTag tag)
     {
-        if ((int)tag >= _onFixedUpdateAbilityFunction.Length) return;
-
-        _onFixedUpdateAbilityFunction[(int)tag]?.Invoke();
+        _onFixedUpdateAbilityFunction[(int)tag].Invoke();
     }
 
     private void FixedUpdateHoming()
     {
-        int count = Physics.OverlapSphereNonAlloc(_rigidbody.position, 3f, Utils.Colliders, _targetLayerMask);
+        int count = Physics.OverlapSphereNonAlloc(_rigidbody.position, HOMING_SEARCH_DISTANCE, Utils.Colliders, _targetLayerMask);
 
-        if (0 != count && HOMING_TIME > _homingElapsedTime)
+        if (0 == count && HOMING_TIME > _homingElapsedTime) return;
+
+        Collider target = null;
+        float minDistance = float.MaxValue;
+
+        for (int i = 0; i < count; ++i)
         {
-            Collider target = null;
-            float minDistance = float.MaxValue;
+            float distance = Vector3.Distance(Utils.Colliders[i].transform.position, transform.position);
 
-            for (int i = 0; i < count; ++i)
-            {
-                float distance = Vector3.Distance(Utils.Colliders[i].transform.position, transform.position);
+            if (minDistance <= distance) continue;
 
-                if (minDistance <= distance) continue;
+            Vector3 dir = (Utils.Colliders[i].transform.position - transform.position).normalized;
 
-                Vector3 dir = (Utils.Colliders[i].transform.position - transform.position).normalized;
+            float dot = Mathf.Clamp(Vector3.Dot(transform.forward, dir), -1f, 1f);
 
-                float dot = Mathf.Clamp(Vector3.Dot(transform.forward, dir), -1f, 1f);
+            if (0f >= dot) continue;
 
-                if (0f >= dot) continue;
+            minDistance = distance;
+            target = Utils.Colliders[i];
+        }
 
-                minDistance = distance;
-                target = Utils.Colliders[i];
-            }
+        if (target != null)
+        {
+            _homingElapsedTime += Time.deltaTime;
 
-            if (target != null)
-            {
-                _homingElapsedTime += Time.deltaTime;
+            Vector3 dir = target.attachedRigidbody.position - _rigidbody.position;
+            Quaternion dirQuat = Quaternion.LookRotation(dir);
+            Quaternion moveQuat = Quaternion.Slerp(_rigidbody.rotation, dirQuat, Time.deltaTime * 20f);
 
-                Vector3 dir = target.attachedRigidbody.position - _rigidbody.position;
-                Quaternion dirQuat = Quaternion.LookRotation(dir);
-                Quaternion moveQuat = Quaternion.Slerp(_rigidbody.rotation, dirQuat, Time.deltaTime * 20f);
-
-                _rigidbody.MoveRotation(moveQuat);
-            }
+            _rigidbody.MoveRotation(moveQuat);
         }
     }
 
@@ -151,7 +150,7 @@ public class Projectile : MonoBehaviour
         int layer = other.gameObject.layer;
         if (LayerValue.WALL_LAYER != layer && LayerValue.MAP_LAYER != layer) return;
 
-        if (0 < _wallBounceCount && _wallBounceCount < 3) return;
+        if (0 < _wallBounceCount && _wallBounceCount < MAX_BOUNCE_COUNT) return;
 
         _isReturning = true;
     }
@@ -166,10 +165,9 @@ public class Projectile : MonoBehaviour
 
             transform.rotation = Quaternion.Euler(0f, transform.eulerAngles.y + angle, 0f);
 
-            if (0.5f >= Vector3.Distance(_owner.position, transform.position))
+            if (RETURN_DISTANCE >= Vector3.Distance(_owner.position, transform.position))
             {
                 gameObject.SetActive(false);
-                _isReturning = false;
             }
         }
     }

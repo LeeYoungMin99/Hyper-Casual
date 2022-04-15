@@ -19,10 +19,11 @@ public abstract class Weapon
     }
 
     protected Character _owner;
-    protected List<Ability> _abilities = new List<Ability>();
-    protected AddComparer _addComparer = new AddComparer();
     protected ObjectPoolingManager<Projectile> _objectPoolingManager;
     protected int _layer;
+
+    private List<Ability> _abilities = new List<Ability>();
+    private AddComparer _addComparer = new AddComparer();
 
     public Weapon(Character owner)
     {

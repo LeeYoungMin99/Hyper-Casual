@@ -15,4 +15,6 @@ public class BouncyWall : Ability
     {
         weapon.AddAbility(this);
     }
+
+    public override void FixedUpdateAbility(Projectile projectile) { }
 }

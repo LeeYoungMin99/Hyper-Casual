@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EStatusEffectType { Blaze, Poison, Freeze }
-
 public abstract class Character : MonoBehaviour, IDamageable
 {
     [SerializeField] protected float _attackDamage = 100f;
@@ -80,18 +78,18 @@ public abstract class Character : MonoBehaviour, IDamageable
         TakeDamageHelper(damage, isCritical);
     }
 
-    public void ActivateStatusEffect(EStatusEffectType type,
+    public void AddStatusEffect(StatusEffect statusEffect)
+    {
+        _statusEffects.Add(statusEffect);
+    }
+
+    public void ActivateStatusEffect(EStatusEffectTag type,
                                      float duration,
                                      float damage,
                                      float criticalMultiplier,
                                      float cirticalRate)
     {
         _statusEffectFunction[(int)type](duration, damage, criticalMultiplier, cirticalRate);
-    }
-
-    public void AddStatusEffect(StatusEffect statusEffect)
-    {
-        _statusEffects.Add(statusEffect);
     }
 
     public T GetStatusEffect<T>() where T : StatusEffect
